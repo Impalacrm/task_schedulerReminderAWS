@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+
 def check_due_tasks():
     """
     Checks and sends reminders for due tasks.
@@ -58,14 +60,15 @@ def check_due_tasks():
                         logging.warning(f"Contact {contact_id} not found. Skipping task {task_id}.")
                         continue
 
+
                     task_reminder_payload = {
                         "task_title": task_title,
                         "task_description": task_description or "",
-                        "user_name": f"{user_info['first_name']} {user_info['last_name']}",
-                        "user_email": user_info["email"],
-                        "contact_name": f"{contact_info['first_name']} {contact_info['last_name']}",
-                        "contact_email": contact_info["email"],
-                        "contact_phone": contact_info.get("phone")
+                        "user_name": f"{user_info.get('first_name', '')} {user_info.get('last_name', '')}".strip(),
+                        "user_email": user_info.get("email", ""),
+                        "contact_name": " ".join(filter(None, [contact_info.get("first_name", ""),contact_info.get("last_name", "")])).title(),
+                        "contact_email": contact_info.get("email", "") or "",
+                        "contact_phone": contact_info.get("phone", "") or ""
                     }
 
                     api_key = os.getenv('API_KEY')

@@ -84,10 +84,10 @@ def get_contact_basic_info_raw(contact_id):
                 return None
 
             return {
-                "first_name": row[0],
-                "last_name": row[1],
-                "email": row[2],
-                "phone": row[3] if row[3] else None
+                "first_name": row[0] or "",
+                "last_name": row[1] or "",
+                "email": row[2] or "",
+                "phone": row[3] or ""
             }
     except Exception as e:
         logging.error(f"Error fetching contact info for {contact_id}: {e}")
