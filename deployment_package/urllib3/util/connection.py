@@ -3,8 +3,8 @@ from __future__ import annotations
 import socket
 import typing
 
-from ..exceptions import LocationParseError
 from .timeout import _DEFAULT_TIMEOUT, _TYPE_TIMEOUT
+from ..exceptions import LocationParseError
 
 _TYPE_SOCKET_OPTIONS = list[tuple[int, int, typing.Union[int, bytes]]]
 
@@ -25,10 +25,10 @@ def is_connection_dropped(conn: BaseHTTPConnection) -> bool:  # Platform-specifi
 # One additional modification is that we avoid binding to IPv6 servers
 # discovered in DNS if the system doesn't have IPv6 functionality.
 def create_connection(
-    address: tuple[str, int],
-    timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
-    source_address: tuple[str, int] | None = None,
-    socket_options: _TYPE_SOCKET_OPTIONS | None = None,
+        address: tuple[str, int],
+        timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
+        source_address: tuple[str, int] | None = None,
+        socket_options: _TYPE_SOCKET_OPTIONS | None = None,
 ) -> socket.socket:
     """Connect to *address* and return the socket object.
 
@@ -91,7 +91,7 @@ def create_connection(
 
 
 def _set_socket_options(
-    sock: socket.socket, options: _TYPE_SOCKET_OPTIONS | None
+        sock: socket.socket, options: _TYPE_SOCKET_OPTIONS | None
 ) -> None:
     if options is None:
         return

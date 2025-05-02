@@ -219,8 +219,8 @@ def _parse(encoded_data, data_len, pointer=0, lengths_only=False, depth=0):
             if not constructed:
                 raise ValueError('Indefinite-length element must be constructed')
             contents_end = pointer
-            while data_len < contents_end + 2 or encoded_data[contents_end:contents_end+2] != b'\x00\x00':
-                _, contents_end = _parse(encoded_data, data_len, contents_end, lengths_only=True, depth=depth+1)
+            while data_len < contents_end + 2 or encoded_data[contents_end:contents_end + 2] != b'\x00\x00':
+                _, contents_end = _parse(encoded_data, data_len, contents_end, lengths_only=True, depth=depth + 1)
             contents_end += 2
             trailer = b'\x00\x00'
 
@@ -236,7 +236,7 @@ def _parse(encoded_data, data_len, pointer=0, lengths_only=False, depth=0):
             constructed,
             tag,
             encoded_data[start:pointer],
-            encoded_data[pointer:contents_end-len(trailer)],
+            encoded_data[pointer:contents_end - len(trailer)],
             trailer
         ),
         contents_end

@@ -74,17 +74,17 @@ class _LockedObject(typing.Generic[T]):
         return self._obj
 
     def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: types.TracebackType | None,
+            self,
+            exc_type: type[BaseException] | None,
+            exc_val: BaseException | None,
+            exc_tb: types.TracebackType | None,
     ) -> None:
         self.lock.release()
 
 
 class HTTP2Connection(HTTPSConnection):
     def __init__(
-        self, host: str, port: int | None = None, **kwargs: typing.Any
+            self, host: str, port: int | None = None, **kwargs: typing.Any
     ) -> None:
         self._h2_conn = self._new_h2_conn()
         self._h2_stream: int | None = None
@@ -110,10 +110,10 @@ class HTTP2Connection(HTTPSConnection):
                 self.sock.sendall(data_to_send)
 
     def putrequest(  # type: ignore[override]
-        self,
-        method: str,
-        url: str,
-        **kwargs: typing.Any,
+            self,
+            method: str,
+            url: str,
+            **kwargs: typing.Any,
     ) -> None:
         """putrequest
         This deviates from the HTTPConnection method signature since we never need to override
@@ -213,18 +213,18 @@ class HTTP2Connection(HTTPSConnection):
                 )
 
     def set_tunnel(
-        self,
-        host: str,
-        port: int | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        scheme: str = "http",
+            self,
+            host: str,
+            port: int | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            scheme: str = "http",
     ) -> None:
         raise NotImplementedError(
             "HTTP/2 does not support setting up a tunnel through a proxy"
         )
 
     def getresponse(  # type: ignore[override]
-        self,
+            self,
     ) -> HTTP2Response:
         status = None
         data = bytearray()
@@ -266,16 +266,16 @@ class HTTP2Connection(HTTPSConnection):
         )
 
     def request(  # type: ignore[override]
-        self,
-        method: str,
-        url: str,
-        body: _TYPE_BODY | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        *,
-        preload_content: bool = True,
-        decode_content: bool = True,
-        enforce_content_length: bool = True,
-        **kwargs: typing.Any,
+            self,
+            method: str,
+            url: str,
+            body: _TYPE_BODY | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            *,
+            preload_content: bool = True,
+            decode_content: bool = True,
+            enforce_content_length: bool = True,
+            **kwargs: typing.Any,
     ) -> None:
         """Send an HTTP/2 request"""
         if "chunked" in kwargs:
@@ -324,12 +324,12 @@ class HTTP2Connection(HTTPSConnection):
 class HTTP2Response(BaseHTTPResponse):
     # TODO: This is a woefully incomplete response object, but works for non-streaming.
     def __init__(
-        self,
-        status: int,
-        headers: HTTPHeaderDict,
-        request_url: str,
-        data: bytes,
-        decode_content: bool = False,  # TODO: support decoding
+            self,
+            status: int,
+            headers: HTTPHeaderDict,
+            request_url: str,
+            data: bytes,
+            decode_content: bool = False,  # TODO: support decoding
     ) -> None:
         super().__init__(
             status=status,

@@ -9,9 +9,9 @@ if typing.TYPE_CHECKING:
 
 
 def connection_requires_http_tunnel(
-    proxy_url: Url | None = None,
-    proxy_config: ProxyConfig | None = None,
-    destination_scheme: str | None = None,
+        proxy_url: Url | None = None,
+        proxy_config: ProxyConfig | None = None,
+        destination_scheme: str | None = None,
 ) -> bool:
     """
     Returns True if the connection requires an HTTP CONNECT through the proxy.
@@ -33,9 +33,9 @@ def connection_requires_http_tunnel(
 
     # Support for forwarding with HTTPS proxies and HTTPS destinations.
     if (
-        proxy_url.scheme == "https"
-        and proxy_config
-        and proxy_config.use_forwarding_for_https
+            proxy_url.scheme == "https"
+            and proxy_config
+            and proxy_config.use_forwarding_for_https
     ):
         return False
 

@@ -22,7 +22,7 @@ class CertificateError(ValueError):
 
 
 def _dnsname_match(
-    dn: typing.Any, hostname: str, max_wildcards: int = 1
+        dn: typing.Any, hostname: str, max_wildcards: int = 1
 ) -> typing.Match[str] | None | bool:
     """Matching according to RFC 6125, section 6.4.3
 
@@ -93,9 +93,9 @@ def _ipaddress_match(ipname: str, host_ip: IPv4Address | IPv6Address) -> bool:
 
 
 def match_hostname(
-    cert: _TYPE_PEER_CERT_RET_DICT | None,
-    hostname: str,
-    hostname_checks_common_name: bool = False,
+        cert: _TYPE_PEER_CERT_RET_DICT | None,
+        hostname: str,
+        hostname_checks_common_name: bool = False,
 ) -> None:
     """Verify that *cert* (in decoded format as returned by
     SSLSocket.getpeercert()) matches the *hostname*.  RFC 2818 and RFC 6125

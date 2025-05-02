@@ -50,7 +50,6 @@ except ImportError:
     class UnsupportedExtension(Exception):  # type: ignore[no-redef]
         pass
 
-
 import logging
 import ssl
 import typing
@@ -62,7 +61,6 @@ from .. import util
 
 if typing.TYPE_CHECKING:
     from OpenSSL.crypto import X509  # type: ignore[import-untyped]
-
 
 __all__ = ["inject_into_urllib3", "extract_from_urllib3"]
 
@@ -79,12 +77,11 @@ if hasattr(ssl, "PROTOCOL_TLSv1_1") and hasattr(OpenSSL.SSL, "TLSv1_1_METHOD"):
 if hasattr(ssl, "PROTOCOL_TLSv1_2") and hasattr(OpenSSL.SSL, "TLSv1_2_METHOD"):
     _openssl_versions[ssl.PROTOCOL_TLSv1_2] = OpenSSL.SSL.TLSv1_2_METHOD
 
-
 _stdlib_to_openssl_verify = {
     ssl.CERT_NONE: OpenSSL.SSL.VERIFY_NONE,
     ssl.CERT_OPTIONAL: OpenSSL.SSL.VERIFY_PEER,
     ssl.CERT_REQUIRED: OpenSSL.SSL.VERIFY_PEER
-    + OpenSSL.SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
+                       + OpenSSL.SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
 }
 _openssl_to_stdlib_verify = {v: k for k, v in _stdlib_to_openssl_verify.items()}
 
@@ -104,22 +101,22 @@ _openssl_to_ssl_minimum_version: dict[int, int] = {
     ssl.TLSVersion.TLSv1_1: _OP_NO_SSLv2_OR_SSLv3 | _OP_NO_TLSv1,
     ssl.TLSVersion.TLSv1_2: _OP_NO_SSLv2_OR_SSLv3 | _OP_NO_TLSv1 | _OP_NO_TLSv1_1,
     ssl.TLSVersion.TLSv1_3: (
-        _OP_NO_SSLv2_OR_SSLv3 | _OP_NO_TLSv1 | _OP_NO_TLSv1_1 | _OP_NO_TLSv1_2
+            _OP_NO_SSLv2_OR_SSLv3 | _OP_NO_TLSv1 | _OP_NO_TLSv1_1 | _OP_NO_TLSv1_2
     ),
     ssl.TLSVersion.MAXIMUM_SUPPORTED: (
-        _OP_NO_SSLv2_OR_SSLv3 | _OP_NO_TLSv1 | _OP_NO_TLSv1_1 | _OP_NO_TLSv1_2
+            _OP_NO_SSLv2_OR_SSLv3 | _OP_NO_TLSv1 | _OP_NO_TLSv1_1 | _OP_NO_TLSv1_2
     ),
 }
 _openssl_to_ssl_maximum_version: dict[int, int] = {
     ssl.TLSVersion.MINIMUM_SUPPORTED: (
-        _OP_NO_SSLv2_OR_SSLv3
-        | _OP_NO_TLSv1
-        | _OP_NO_TLSv1_1
-        | _OP_NO_TLSv1_2
-        | _OP_NO_TLSv1_3
+            _OP_NO_SSLv2_OR_SSLv3
+            | _OP_NO_TLSv1
+            | _OP_NO_TLSv1_1
+            | _OP_NO_TLSv1_2
+            | _OP_NO_TLSv1_3
     ),
     ssl.TLSVersion.TLSv1: (
-        _OP_NO_SSLv2_OR_SSLv3 | _OP_NO_TLSv1_1 | _OP_NO_TLSv1_2 | _OP_NO_TLSv1_3
+            _OP_NO_SSLv2_OR_SSLv3 | _OP_NO_TLSv1_1 | _OP_NO_TLSv1_2 | _OP_NO_TLSv1_3
     ),
     ssl.TLSVersion.TLSv1_1: _OP_NO_SSLv2_OR_SSLv3 | _OP_NO_TLSv1_2 | _OP_NO_TLSv1_3,
     ssl.TLSVersion.TLSv1_2: _OP_NO_SSLv2_OR_SSLv3 | _OP_NO_TLSv1_3,
@@ -131,7 +128,6 @@ _openssl_to_ssl_maximum_version: dict[int, int] = {
 SSL_WRITE_BLOCKSIZE = 16384
 
 orig_util_SSLContext = util.ssl_.SSLContext
-
 
 log = logging.getLogger(__name__)
 
@@ -207,7 +203,7 @@ def _dnsname_to_stdlib(name: str) -> str | None:
         try:
             for prefix in ["*.", "."]:
                 if name.startswith(prefix):
-                    name = name[len(prefix) :]
+                    name = name[len(prefix):]
                     return prefix.encode("ascii") + idna.encode(name)
             return idna.encode(name)
         except idna.core.IDNAError:
@@ -237,10 +233,10 @@ def get_subj_alt_name(peer_cert: X509) -> list[tuple[str, str]]:
         # No such extension, return the empty list.
         return []
     except (
-        x509.DuplicateExtension,
-        UnsupportedExtension,
-        x509.UnsupportedGeneralNameType,
-        UnicodeError,
+            x509.DuplicateExtension,
+            UnsupportedExtension,
+            x509.UnsupportedGeneralNameType,
+            UnicodeError,
     ) as e:
         # A problem has been found with the quality of the certificate. Assume
         # no SAN field is present.
@@ -275,10 +271,10 @@ class WrappedSocket:
     """API-compatibility wrapper for Python OpenSSL's Connection-class."""
 
     def __init__(
-        self,
-        connection: OpenSSL.SSL.Connection,
-        socket: socket_cls,
-        suppress_ragged_eofs: bool = True,
+            self,
+            connection: OpenSSL.SSL.Connection,
+            socket: socket_cls,
+            suppress_ragged_eofs: bool = True,
     ) -> None:
         self.connection = connection
         self.socket = socket
@@ -362,7 +358,7 @@ class WrappedSocket:
         total_sent = 0
         while total_sent < len(data):
             sent = self._send_until_done(
-                data[total_sent : total_sent + SSL_WRITE_BLOCKSIZE]
+                data[total_sent: total_sent + SSL_WRITE_BLOCKSIZE]
             )
             total_sent += sent
 
@@ -384,7 +380,7 @@ class WrappedSocket:
             return
 
     def getpeercert(
-        self, binary_form: bool = False
+            self, binary_form: bool = False
     ) -> dict[str, list[typing.Any]] | None:
         x509 = self.connection.get_peer_certificate()
 
@@ -451,10 +447,10 @@ class PyOpenSSLContext:
         self._ctx.set_cipher_list(ciphers)
 
     def load_verify_locations(
-        self,
-        cafile: str | None = None,
-        capath: str | None = None,
-        cadata: bytes | None = None,
+            self,
+            cafile: str | None = None,
+            capath: str | None = None,
+            cadata: bytes | None = None,
     ) -> None:
         if cafile is not None:
             cafile = cafile.encode("utf-8")  # type: ignore[assignment]
@@ -468,10 +464,10 @@ class PyOpenSSLContext:
             raise ssl.SSLError(f"unable to load trusted certificates: {e!r}") from e
 
     def load_cert_chain(
-        self,
-        certfile: str,
-        keyfile: str | None = None,
-        password: str | None = None,
+            self,
+            certfile: str,
+            keyfile: str | None = None,
+            password: str | None = None,
     ) -> None:
         try:
             self._ctx.use_certificate_chain_file(certfile)
@@ -488,12 +484,12 @@ class PyOpenSSLContext:
         return self._ctx.set_alpn_protos(protocols)  # type: ignore[no-any-return]
 
     def wrap_socket(
-        self,
-        sock: socket_cls,
-        server_side: bool = False,
-        do_handshake_on_connect: bool = True,
-        suppress_ragged_eofs: bool = True,
-        server_hostname: bytes | str | None = None,
+            self,
+            sock: socket_cls,
+            server_side: bool = False,
+            do_handshake_on_connect: bool = True,
+            suppress_ragged_eofs: bool = True,
+            server_hostname: bytes | str | None = None,
     ) -> WrappedSocket:
         cnx = OpenSSL.SSL.Connection(self._ctx, sock)
 
@@ -545,10 +541,10 @@ class PyOpenSSLContext:
 
 
 def _verify_callback(
-    cnx: OpenSSL.SSL.Connection,
-    x509: X509,
-    err_no: int,
-    err_depth: int,
-    return_code: int,
+        cnx: OpenSSL.SSL.Connection,
+        x509: X509,
+        err_no: int,
+        err_depth: int,
+        return_code: int,
 ) -> bool:
     return err_no == 0

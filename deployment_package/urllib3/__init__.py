@@ -72,7 +72,7 @@ logging.getLogger(__name__).addHandler(NullHandler())
 
 
 def add_stderr_logger(
-    level: int = logging.DEBUG,
+        level: int = logging.DEBUG,
 ) -> logging.StreamHandler[typing.TextIO]:
     """
     Helper for quickly adding a StreamHandler to the logger. Useful for
@@ -94,7 +94,6 @@ def add_stderr_logger(
 # ... Clean up.
 del NullHandler
 
-
 # All warning filters *must* be appended unless you're really certain that they
 # shouldn't be: otherwise, it's very hard for users to use most Python
 # mechanisms to silence them.
@@ -115,18 +114,18 @@ _DEFAULT_POOL = PoolManager()
 
 
 def request(
-    method: str,
-    url: str,
-    *,
-    body: _TYPE_BODY | None = None,
-    fields: _TYPE_FIELDS | None = None,
-    headers: typing.Mapping[str, str] | None = None,
-    preload_content: bool | None = True,
-    decode_content: bool | None = True,
-    redirect: bool | None = True,
-    retries: Retry | bool | int | None = None,
-    timeout: Timeout | float | int | None = 3,
-    json: typing.Any | None = None,
+        method: str,
+        url: str,
+        *,
+        body: _TYPE_BODY | None = None,
+        fields: _TYPE_FIELDS | None = None,
+        headers: typing.Mapping[str, str] | None = None,
+        preload_content: bool | None = True,
+        decode_content: bool | None = True,
+        redirect: bool | None = True,
+        retries: Retry | bool | int | None = None,
+        timeout: Timeout | float | int | None = 3,
+        json: typing.Any | None = None,
 ) -> BaseHTTPResponse:
     """
     A convenience, top-level request method. It uses a module-global ``PoolManager`` instance.

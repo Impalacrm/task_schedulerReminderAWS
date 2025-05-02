@@ -10,6 +10,7 @@ from .constant import CHARDET_CORRESPONDENCE
 if TYPE_CHECKING:
     from typing_extensions import TypedDict
 
+
     class ResultDict(TypedDict):
         encoding: str | None
         language: str
@@ -17,7 +18,7 @@ if TYPE_CHECKING:
 
 
 def detect(
-    byte_str: bytes, should_rename_legacy: bool = False, **kwargs: Any
+        byte_str: bytes, should_rename_legacy: bool = False, **kwargs: Any
 ) -> ResultDict:
     """
     chardet legacy method

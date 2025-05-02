@@ -13,7 +13,7 @@ _TYPE_FIELD_VALUE_TUPLE = typing.Union[
 
 
 def guess_content_type(
-    filename: str | None, default: str = "application/octet-stream"
+        filename: str | None, default: str = "application/octet-stream"
 ) -> str:
     """
     Guess the "Content-Type" of a file.
@@ -169,12 +169,12 @@ class RequestField:
     """
 
     def __init__(
-        self,
-        name: str,
-        data: _TYPE_FIELD_VALUE,
-        filename: str | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        header_formatter: typing.Callable[[str, _TYPE_FIELD_VALUE], str] | None = None,
+            self,
+            name: str,
+            data: _TYPE_FIELD_VALUE,
+            filename: str | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            header_formatter: typing.Callable[[str, _TYPE_FIELD_VALUE], str] | None = None,
     ):
         self._name = name
         self._filename = filename
@@ -198,10 +198,10 @@ class RequestField:
 
     @classmethod
     def from_tuples(
-        cls,
-        fieldname: str,
-        value: _TYPE_FIELD_VALUE_TUPLE,
-        header_formatter: typing.Callable[[str, _TYPE_FIELD_VALUE], str] | None = None,
+            cls,
+            fieldname: str,
+            value: _TYPE_FIELD_VALUE_TUPLE,
+            header_formatter: typing.Callable[[str, _TYPE_FIELD_VALUE], str] | None = None,
     ) -> RequestField:
         """
         A :class:`~urllib3.fields.RequestField` factory from old-style tuple parameters.
@@ -258,11 +258,11 @@ class RequestField:
         return self.header_formatter(name, value)
 
     def _render_parts(
-        self,
-        header_parts: (
-            dict[str, _TYPE_FIELD_VALUE | None]
-            | typing.Sequence[tuple[str, _TYPE_FIELD_VALUE | None]]
-        ),
+            self,
+            header_parts: (
+                    dict[str, _TYPE_FIELD_VALUE | None]
+                    | typing.Sequence[tuple[str, _TYPE_FIELD_VALUE | None]]
+            ),
     ) -> str:
         """
         Helper function to format and quote a single header.
@@ -308,10 +308,10 @@ class RequestField:
         return "\r\n".join(lines)
 
     def make_multipart(
-        self,
-        content_disposition: str | None = None,
-        content_type: str | None = None,
-        content_location: str | None = None,
+            self,
+            content_disposition: str | None = None,
+            content_type: str | None = None,
+            content_location: str | None = None,
     ) -> None:
         """
         Makes this request field into a multipart request field.

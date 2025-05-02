@@ -10,10 +10,10 @@ the following items:
 
 from __future__ import unicode_literals, division, absolute_import, print_function
 
-from encodings import idna  # noqa
 import codecs
 import re
 import sys
+from encodings import idna  # noqa
 
 from ._errors import unwrap
 from ._types import byte_cls, str_cls, type_name, bytes_to_list, int_types
@@ -220,6 +220,7 @@ def _urlquote(string, safe=''):
             for safe_char in list(safe):
                 unicode_string = unicode_string.replace(safe_char, '%%%02x' % ord(safe_char))
             return unicode_string
+
         string = re.sub('(?:%[0-9a-fA-F]{2})+', _try_unescape, string)
 
         # Once we have the minimal set of hex quoted values, removed them from
@@ -227,6 +228,7 @@ def _urlquote(string, safe=''):
         def _extract_escape(match):
             escapes.append(match.group(0).encode('ascii'))
             return '\x00'
+
         string = re.sub('%[0-9a-fA-F]{2}', _extract_escape, string)
 
     output = urlquote(string.encode('utf-8'), safe=safe.encode('utf-8'))
@@ -237,6 +239,7 @@ def _urlquote(string, safe=''):
     if len(escapes) > 0:
         def _return_escape(_):
             return escapes.pop(0)
+
         output = re.sub(b'%00', _return_escape, output)
 
     return output

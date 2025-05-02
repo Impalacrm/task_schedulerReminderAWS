@@ -2,52 +2,13 @@ from collections import defaultdict
 from enum import Enum, auto
 
 from pg8000.converters import (
-    BIGINT,
-    BOOLEAN,
-    BOOLEAN_ARRAY,
-    BYTES,
-    CHAR,
-    CHAR_ARRAY,
-    DATE,
-    FLOAT,
-    FLOAT_ARRAY,
-    INET,
-    INT2VECTOR,
-    INTEGER,
-    INTEGER_ARRAY,
-    INTERVAL,
-    JSON,
-    JSONB,
-    JSONB_ARRAY,
-    JSON_ARRAY,
-    MACADDR,
-    NAME,
-    NAME_ARRAY,
-    NULLTYPE,
-    NUMERIC,
-    NUMERIC_ARRAY,
-    OID,
-    PGInterval,
-    STRING,
-    TEXT,
-    TEXT_ARRAY,
-    TIME,
-    TIMESTAMP,
-    TIMESTAMPTZ,
-    UNKNOWN,
-    UUID_TYPE,
-    VARCHAR,
-    VARCHAR_ARRAY,
-    XID,
-    identifier,
-    literal,
     make_params,
 )
 from pg8000.core import CoreConnection, ver
-from pg8000.exceptions import DatabaseError, Error, InterfaceError
-from pg8000.types import Range
+from pg8000.exceptions import InterfaceError
 
 __version__ = ver
+
 
 # Copyright (c) 2007-2009, Mathieu Fenniak
 # Copyright (c) The Contributors

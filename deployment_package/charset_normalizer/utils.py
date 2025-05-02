@@ -3,15 +3,15 @@ from __future__ import annotations
 import importlib
 import logging
 import unicodedata
+from _multibytecodec import (  # type: ignore[import-not-found,import]
+    MultibyteIncrementalDecoder,
+)
 from codecs import IncrementalDecoder
-from encodings.aliases import aliases
 from functools import lru_cache
 from re import findall
 from typing import Generator
 
-from _multibytecodec import (  # type: ignore[import-not-found,import]
-    MultibyteIncrementalDecoder,
-)
+from encodings.aliases import aliases
 
 from .constant import (
     ENCODING_MARKS,
@@ -30,14 +30,14 @@ def is_accentuated(character: str) -> bool:
     except ValueError:  # Defensive: unicode database outdated?
         return False
     return (
-        "WITH GRAVE" in description
-        or "WITH ACUTE" in description
-        or "WITH CEDILLA" in description
-        or "WITH DIAERESIS" in description
-        or "WITH CIRCUMFLEX" in description
-        or "WITH TILDE" in description
-        or "WITH MACRON" in description
-        or "WITH RING ABOVE" in description
+            "WITH GRAVE" in description
+            or "WITH ACUTE" in description
+            or "WITH CEDILLA" in description
+            or "WITH DIAERESIS" in description
+            or "WITH CIRCUMFLEX" in description
+            or "WITH TILDE" in description
+            or "WITH MACRON" in description
+            or "WITH RING ABOVE" in description
     )
 
 
@@ -208,10 +208,10 @@ def is_unicode_range_secondary(range_name: str) -> bool:
 @lru_cache(maxsize=UTF8_MAXIMAL_ALLOCATION)
 def is_unprintable(character: str) -> bool:
     return (
-        character.isspace() is False  # includes \n \t \r \v
-        and character.isprintable() is False
-        and character != "\x1a"  # Why? Its the ASCII substitute character.
-        and character != "\ufeff"  # bug discovered in Python,
+            character.isspace() is False  # includes \n \t \r \v
+            and character.isprintable() is False
+            and character != "\x1a"  # Why? Its the ASCII substitute character.
+            and character != "\ufeff"  # bug discovered in Python,
         # Zero Width No-Break Space located in 	Arabic Presentation Forms-B, Unicode 1.1 not acknowledged as space.
     )
 
@@ -334,15 +334,15 @@ def is_cp_similar(iana_name_a: str, iana_name_b: str) -> bool:
     the function cp_similarity.
     """
     return (
-        iana_name_a in IANA_SUPPORTED_SIMILAR
-        and iana_name_b in IANA_SUPPORTED_SIMILAR[iana_name_a]
+            iana_name_a in IANA_SUPPORTED_SIMILAR
+            and iana_name_b in IANA_SUPPORTED_SIMILAR[iana_name_a]
     )
 
 
 def set_logging_handler(
-    name: str = "charset_normalizer",
-    level: int = logging.INFO,
-    format_string: str = "%(asctime)s | %(levelname)s | %(message)s",
+        name: str = "charset_normalizer",
+        level: int = logging.INFO,
+        format_string: str = "%(asctime)s | %(levelname)s | %(message)s",
 ) -> None:
     logger = logging.getLogger(name)
     logger.setLevel(level)
@@ -353,19 +353,19 @@ def set_logging_handler(
 
 
 def cut_sequence_chunks(
-    sequences: bytes,
-    encoding_iana: str,
-    offsets: range,
-    chunk_size: int,
-    bom_or_sig_available: bool,
-    strip_sig_or_bom: bool,
-    sig_payload: bytes,
-    is_multi_byte_decoder: bool,
-    decoded_payload: str | None = None,
+        sequences: bytes,
+        encoding_iana: str,
+        offsets: range,
+        chunk_size: int,
+        bom_or_sig_available: bool,
+        strip_sig_or_bom: bool,
+        sig_payload: bytes,
+        is_multi_byte_decoder: bool,
+        decoded_payload: str | None = None,
 ) -> Generator[str, None, None]:
     if decoded_payload and is_multi_byte_decoder is False:
         for i in offsets:
-            chunk = decoded_payload[i : i + chunk_size]
+            chunk = decoded_payload[i: i + chunk_size]
             if not chunk:
                 break
             yield chunk
@@ -375,7 +375,7 @@ def cut_sequence_chunks(
             if chunk_end > len(sequences) + 8:
                 continue
 
-            cut_sequence = sequences[i : i + chunk_size]
+            cut_sequence = sequences[i: i + chunk_size]
 
             if bom_or_sig_available and strip_sig_or_bom is False:
                 cut_sequence = sig_payload + cut_sequence
@@ -391,8 +391,8 @@ def cut_sequence_chunks(
                 chunk_partial_size_chk: int = min(chunk_size, 16)
 
                 if (
-                    decoded_payload
-                    and chunk[:chunk_partial_size_chk] not in decoded_payload
+                        decoded_payload
+                        and chunk[:chunk_partial_size_chk] not in decoded_payload
                 ):
                     for j in range(i, i - 4, -1):
                         cut_sequence = sequences[j:chunk_end]

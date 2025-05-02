@@ -103,10 +103,10 @@ def mb_encoding_languages(iana_name: str) -> list[str]:
     This function does the correspondence.
     """
     if (
-        iana_name.startswith("shift_")
-        or iana_name.startswith("iso2022_jp")
-        or iana_name.startswith("euc_j")
-        or iana_name == "cp932"
+            iana_name.startswith("shift_")
+            or iana_name.startswith("iso2022_jp")
+            or iana_name.startswith("euc_j")
+            or iana_name == "cp932"
     ):
         return ["Japanese"]
     if iana_name.startswith("gb") or iana_name in ZH_NAMES:
@@ -135,7 +135,7 @@ def get_target_features(language: str) -> tuple[bool, bool]:
 
 
 def alphabet_languages(
-    characters: list[str], ignore_non_latin: bool = False
+        characters: list[str], ignore_non_latin: bool = False
 ) -> list[str]:
     """
     Return associated languages associated to given characters.
@@ -170,7 +170,7 @@ def alphabet_languages(
 
 
 def characters_popularity_compare(
-    language: str, ordered_characters: list[str]
+        language: str, ordered_characters: list[str]
 ) -> float:
     """
     Determine if a ordered characters list (by occurrence from most appearance to rarest) match a particular language.
@@ -189,37 +189,37 @@ def characters_popularity_compare(
     large_alphabet: bool = target_language_characters_count > 26
 
     for character, character_rank in zip(
-        ordered_characters, range(0, ordered_characters_count)
+            ordered_characters, range(0, ordered_characters_count)
     ):
         if character not in FREQUENCIES_language_set:
             continue
 
         character_rank_in_language: int = FREQUENCIES[language].index(character)
         expected_projection_ratio: float = (
-            target_language_characters_count / ordered_characters_count
+                target_language_characters_count / ordered_characters_count
         )
         character_rank_projection: int = int(character_rank * expected_projection_ratio)
 
         if (
-            large_alphabet is False
-            and abs(character_rank_projection - character_rank_in_language) > 4
+                large_alphabet is False
+                and abs(character_rank_projection - character_rank_in_language) > 4
         ):
             continue
 
         if (
-            large_alphabet is True
-            and abs(character_rank_projection - character_rank_in_language)
-            < target_language_characters_count / 3
+                large_alphabet is True
+                and abs(character_rank_projection - character_rank_in_language)
+                < target_language_characters_count / 3
         ):
             character_approved_count += 1
             continue
 
         characters_before_source: list[str] = FREQUENCIES[language][
-            0:character_rank_in_language
-        ]
+                                              0:character_rank_in_language
+                                              ]
         characters_after_source: list[str] = FREQUENCIES[language][
-            character_rank_in_language:
-        ]
+                                             character_rank_in_language:
+                                             ]
         characters_before: list[str] = ordered_characters[0:character_rank]
         characters_after: list[str] = ordered_characters[character_rank:]
 
@@ -240,8 +240,8 @@ def characters_popularity_compare(
             continue
 
         if (
-            before_match_count / len(characters_before_source) >= 0.4
-            or after_match_count / len(characters_after_source) >= 0.4
+                before_match_count / len(characters_before_source) >= 0.4
+                or after_match_count / len(characters_after_source) >= 0.4
         ):
             character_approved_count += 1
             continue
@@ -270,8 +270,8 @@ def alpha_unicode_split(decoded_sequence: str) -> list[str]:
 
         for discovered_range in layers:
             if (
-                is_suspiciously_successive_range(discovered_range, character_range)
-                is False
+                    is_suspiciously_successive_range(discovered_range, character_range)
+                    is False
             ):
                 layer_target_range = discovered_range
                 break
@@ -345,7 +345,7 @@ def filter_alt_coherence_matches(results: CoherenceMatches) -> CoherenceMatches:
 
 @lru_cache(maxsize=2048)
 def coherence_ratio(
-    decoded_sequence: str, threshold: float = 0.1, lg_inclusion: str | None = None
+        decoded_sequence: str, threshold: float = 0.1, lg_inclusion: str | None = None
 ) -> CoherenceMatches:
     """
     Detect ANY language that can be identified in given sequence. The sequence will be analysed by layers.
@@ -374,7 +374,7 @@ def coherence_ratio(
         popular_character_ordered: list[str] = [c for c, o in most_common]
 
         for language in lg_inclusion_list or alphabet_languages(
-            popular_character_ordered, ignore_non_latin
+                popular_character_ordered, ignore_non_latin
         ):
             ratio: float = characters_popularity_compare(
                 language, popular_character_ordered

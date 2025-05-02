@@ -976,7 +976,6 @@ ContentInfo._oid_specs = {
     'authenticated_enveloped_data': AuthEnvelopedData,
 }
 
-
 EncapsulatedContentInfo._oid_specs = {
     'signed_data': SignedData,
     'enveloped_data': EnvelopedData,
@@ -987,7 +986,6 @@ EncapsulatedContentInfo._oid_specs = {
     'compressed_data': CompressedData,
     'authenticated_enveloped_data': AuthEnvelopedData,
 }
-
 
 CMSAttribute._oid_specs = {
     'content_type': SetOfContentType,

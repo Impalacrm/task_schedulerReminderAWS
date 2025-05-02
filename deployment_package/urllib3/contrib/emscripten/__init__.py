@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import urllib3.connection
 
-from ...connectionpool import HTTPConnectionPool, HTTPSConnectionPool
 from .connection import EmscriptenHTTPConnection, EmscriptenHTTPSConnection
+from ...connectionpool import HTTPConnectionPool, HTTPSConnectionPool
 
 
 def inject_into_urllib3() -> None:

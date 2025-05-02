@@ -34,13 +34,13 @@ def with_warn_for_invalid_lines(mappings: Iterator[Binding]) -> Iterator[Binding
 
 class DotEnv:
     def __init__(
-        self,
-        dotenv_path: Optional[StrPath],
-        stream: Optional[IO[str]] = None,
-        verbose: bool = False,
-        encoding: Optional[str] = None,
-        interpolate: bool = True,
-        override: bool = True,
+            self,
+            dotenv_path: Optional[StrPath],
+            stream: Optional[IO[str]] = None,
+            verbose: bool = False,
+            encoding: Optional[str] = None,
+            interpolate: bool = True,
+            override: bool = True,
     ) -> None:
         self.dotenv_path: Optional[StrPath] = dotenv_path
         self.stream: Optional[IO[str]] = stream
@@ -115,9 +115,9 @@ class DotEnv:
 
 
 def get_key(
-    dotenv_path: StrPath,
-    key_to_get: str,
-    encoding: Optional[str] = "utf-8",
+        dotenv_path: StrPath,
+        key_to_get: str,
+        encoding: Optional[str] = "utf-8",
 ) -> Optional[str]:
     """
     Get the value of a given key from the given .env.
@@ -129,8 +129,8 @@ def get_key(
 
 @contextmanager
 def rewrite(
-    path: StrPath,
-    encoding: Optional[str],
+        path: StrPath,
+        encoding: Optional[str],
 ) -> Iterator[Tuple[IO[str], IO[str]]]:
     pathlib.Path(path).touch()
 
@@ -150,12 +150,12 @@ def rewrite(
 
 
 def set_key(
-    dotenv_path: StrPath,
-    key_to_set: str,
-    value_to_set: str,
-    quote_mode: str = "always",
-    export: bool = False,
-    encoding: Optional[str] = "utf-8",
+        dotenv_path: StrPath,
+        key_to_set: str,
+        value_to_set: str,
+        quote_mode: str = "always",
+        export: bool = False,
+        encoding: Optional[str] = "utf-8",
 ) -> Tuple[Optional[bool], str, str]:
     """
     Adds or Updates a key/value to the given .env
@@ -167,8 +167,8 @@ def set_key(
         raise ValueError(f"Unknown quote_mode: {quote_mode}")
 
     quote = (
-        quote_mode == "always"
-        or (quote_mode == "auto" and not value_to_set.isalnum())
+            quote_mode == "always"
+            or (quote_mode == "auto" and not value_to_set.isalnum())
     )
 
     if quote:
@@ -199,10 +199,10 @@ def set_key(
 
 
 def unset_key(
-    dotenv_path: StrPath,
-    key_to_unset: str,
-    quote_mode: str = "always",
-    encoding: Optional[str] = "utf-8",
+        dotenv_path: StrPath,
+        key_to_unset: str,
+        quote_mode: str = "always",
+        encoding: Optional[str] = "utf-8",
 ) -> Tuple[Optional[bool], str]:
     """
     Removes a given key from the given `.env` file.
@@ -230,8 +230,8 @@ def unset_key(
 
 
 def resolve_variables(
-    values: Iterable[Tuple[str, Optional[str]]],
-    override: bool,
+        values: Iterable[Tuple[str, Optional[str]]],
+        override: bool,
 ) -> Mapping[str, Optional[str]]:
     new_values: Dict[str, Optional[str]] = {}
 
@@ -273,9 +273,9 @@ def _walk_to_root(path: str) -> Iterator[str]:
 
 
 def find_dotenv(
-    filename: str = '.env',
-    raise_error_if_not_found: bool = False,
-    usecwd: bool = False,
+        filename: str = '.env',
+        raise_error_if_not_found: bool = False,
+        usecwd: bool = False,
 ) -> str:
     """
     Search in increasingly higher folders for the given file
@@ -300,7 +300,7 @@ def find_dotenv(
         current_file = __file__
 
         while frame.f_code.co_filename == current_file or not os.path.exists(
-            frame.f_code.co_filename
+                frame.f_code.co_filename
         ):
             assert frame.f_back is not None
             frame = frame.f_back
@@ -319,12 +319,12 @@ def find_dotenv(
 
 
 def load_dotenv(
-    dotenv_path: Optional[StrPath] = None,
-    stream: Optional[IO[str]] = None,
-    verbose: bool = False,
-    override: bool = False,
-    interpolate: bool = True,
-    encoding: Optional[str] = "utf-8",
+        dotenv_path: Optional[StrPath] = None,
+        stream: Optional[IO[str]] = None,
+        verbose: bool = False,
+        override: bool = False,
+        interpolate: bool = True,
+        encoding: Optional[str] = "utf-8",
 ) -> bool:
     """Parse a .env file and then load all the variables found as environment variables.
 
@@ -357,11 +357,11 @@ def load_dotenv(
 
 
 def dotenv_values(
-    dotenv_path: Optional[StrPath] = None,
-    stream: Optional[IO[str]] = None,
-    verbose: bool = False,
-    interpolate: bool = True,
-    encoding: Optional[str] = "utf-8",
+        dotenv_path: Optional[StrPath] = None,
+        stream: Optional[IO[str]] = None,
+        verbose: bool = False,
+        interpolate: bool = True,
+        encoding: Optional[str] = "utf-8",
 ) -> Dict[str, Optional[str]]:
     """
     Parse a .env file and return its content as a dict.

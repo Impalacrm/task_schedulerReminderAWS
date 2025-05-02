@@ -1,7 +1,8 @@
 '''Base classes and helpers for building zone specific tzinfo classes'''
 
-from datetime import datetime, timedelta, tzinfo
 from bisect import bisect_right
+from datetime import datetime, timedelta, tzinfo
+
 try:
     set
 except NameError:
@@ -25,7 +26,7 @@ def memorized_timedelta(seconds):
         return delta
 
 
-_epoch = datetime(1970, 1, 1, 0, 0) # datetime.utcfromtimestamp(0)
+_epoch = datetime(1970, 1, 1, 0, 0)  # datetime.utcfromtimestamp(0)
 _datetime_cache = {0: _epoch}
 
 
@@ -82,6 +83,7 @@ class StaticTzInfo(BaseTzInfo):
     These timezones are rare, as most locations have changed their
     offset at some point in their history
     '''
+
     def fromutc(self, dt):
         '''See datetime.tzinfo.fromutc'''
         if dt.tzinfo is not None and dt.tzinfo is not self:
@@ -391,7 +393,7 @@ class DstTzInfo(BaseTzInfo):
         dates = {}  # utc -> local
         for local_dt in filtered_possible_loc_dt:
             utc_time = (
-                local_dt.replace(tzinfo=None) - local_dt.tzinfo._utcoffset)
+                    local_dt.replace(tzinfo=None) - local_dt.tzinfo._utcoffset)
             assert utc_time not in dates
             dates[utc_time] = local_dt
         return dates[[min, max][not is_dst](dates)]

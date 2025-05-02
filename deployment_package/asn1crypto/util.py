@@ -28,10 +28,9 @@ from ._ordereddict import OrderedDict  # noqa
 from ._types import type_name
 
 if sys.platform == 'win32':
-    from ._inet import inet_ntop, inet_pton
+    pass
 else:
     from socket import inet_ntop, inet_pton  # noqa
-
 
 # Python 2
 if sys.version_info <= (3,):
@@ -86,6 +85,7 @@ if sys.version_info <= (3,):
 
         return output
 
+
     def int_from_bytes(value, signed=False):
         """
         Converts a byte string to an integer
@@ -114,6 +114,7 @@ if sys.version_info <= (3,):
             return num - (1 << bit_len)
 
         return num
+
 
     class timezone(tzinfo):  # noqa
         """
@@ -204,12 +205,14 @@ if sys.version_info <= (3,):
 
             return timedelta(0)
 
+
     timezone.utc = timezone(timedelta(0))
 
 # Python 3
 else:
 
     from datetime import timezone  # noqa
+
 
     def int_to_bytes(value, signed=False, width=None):
         """
@@ -241,6 +244,7 @@ else:
                 bits_required = value.bit_length()
             width = math.ceil(bits_required / 8) or 1
         return value.to_bytes(width, byteorder='big', signed=signed)
+
 
     def int_from_bytes(value, signed=False):
         """

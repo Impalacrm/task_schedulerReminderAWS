@@ -107,10 +107,10 @@ class Timeout:
     DEFAULT_TIMEOUT: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT
 
     def __init__(
-        self,
-        total: _TYPE_TIMEOUT = None,
-        connect: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
-        read: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
+            self,
+            total: _TYPE_TIMEOUT = None,
+            connect: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
+            read: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
     ) -> None:
         self._connect = self._validate_timeout(connect, "connect")
         self._read = self._validate_timeout(read, "read")
@@ -260,10 +260,10 @@ class Timeout:
             has not yet been called on this object.
         """
         if (
-            self.total is not None
-            and self.total is not _DEFAULT_TIMEOUT
-            and self._read is not None
-            and self._read is not _DEFAULT_TIMEOUT
+                self.total is not None
+                and self.total is not _DEFAULT_TIMEOUT
+                and self._read is not None
+                and self._read is not _DEFAULT_TIMEOUT
         ):
             # In case the connect timeout has not yet been established.
             if self._start_connect is None:

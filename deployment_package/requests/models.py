@@ -6,13 +6,12 @@ This module contains the primary objects that power Requests.
 """
 
 import datetime
+from io import UnsupportedOperation
 
 # Import encoding now, to avoid implicit import later.
 # Implicit import within threads may cause LookupError when standard library is in a ZIP,
 # such as in Embedded Python. See https://github.com/psf/requests/issues/3578.
 import encodings.idna  # noqa: F401
-from io import UnsupportedOperation
-
 from urllib3.exceptions import (
     DecodeError,
     LocationParseError,
@@ -256,17 +255,17 @@ class Request(RequestHooksMixin):
     """
 
     def __init__(
-        self,
-        method=None,
-        url=None,
-        headers=None,
-        files=None,
-        data=None,
-        params=None,
-        auth=None,
-        cookies=None,
-        hooks=None,
-        json=None,
+            self,
+            method=None,
+            url=None,
+            headers=None,
+            files=None,
+            data=None,
+            params=None,
+            auth=None,
+            cookies=None,
+            hooks=None,
+            json=None,
     ):
         # Default empty dicts for dict params.
         data = [] if data is None else data
@@ -349,17 +348,17 @@ class PreparedRequest(RequestEncodingMixin, RequestHooksMixin):
         self._body_position = None
 
     def prepare(
-        self,
-        method=None,
-        url=None,
-        headers=None,
-        files=None,
-        data=None,
-        params=None,
-        auth=None,
-        cookies=None,
-        hooks=None,
-        json=None,
+            self,
+            method=None,
+            url=None,
+            headers=None,
+            files=None,
+            data=None,
+            params=None,
+            auth=None,
+            cookies=None,
+            hooks=None,
+            json=None,
     ):
         """Prepares the entire request with the given parameters."""
 
@@ -578,8 +577,8 @@ class PreparedRequest(RequestEncodingMixin, RequestHooksMixin):
                 # to Transfer-Encoding: chunked.
                 self.headers["Content-Length"] = builtin_str(length)
         elif (
-            self.method not in ("GET", "HEAD")
-            and self.headers.get("Content-Length") is None
+                self.method not in ("GET", "HEAD")
+                and self.headers.get("Content-Length") is None
         ):
             # Set Content-Length to 0 for methods that can have a body
             # but don't provide one. (i.e. not GET or HEAD)
@@ -855,7 +854,7 @@ class Response:
         return chunks
 
     def iter_lines(
-        self, chunk_size=ITER_CHUNK_SIZE, decode_unicode=False, delimiter=None
+            self, chunk_size=ITER_CHUNK_SIZE, decode_unicode=False, delimiter=None
     ):
         """Iterates over the response data, one line at a time.  When
         stream=True is set on the request, this avoids reading the
@@ -867,7 +866,7 @@ class Response:
         pending = None
 
         for chunk in self.iter_content(
-            chunk_size=chunk_size, decode_unicode=decode_unicode
+                chunk_size=chunk_size, decode_unicode=decode_unicode
         ):
             if pending is not None:
                 chunk = pending + chunk

@@ -1,6 +1,6 @@
-from datetime import timedelta
 import weakref
 from collections import OrderedDict
+from datetime import timedelta
 
 from six.moves import _thread
 
@@ -66,7 +66,7 @@ class _TzStrFactory(_TzFactory):
 
         if instance is None:
             instance = cls.__instances.setdefault(key,
-                cls.instance(s, posix_offset))
+                                                  cls.instance(s, posix_offset))
 
         # This lock may not be necessary in Python 3. See GH issue #901
         with cls.__cache_lock:
@@ -77,4 +77,3 @@ class _TzStrFactory(_TzFactory):
                 cls.__strong_cache.popitem(last=False)
 
         return instance
-

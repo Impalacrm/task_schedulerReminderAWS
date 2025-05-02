@@ -30,6 +30,7 @@ else:
 
     from UserDict import DictMixin
 
+
     class OrderedDict(dict, DictMixin):
 
         def __init__(self, *args, **kwds):
@@ -44,7 +45,7 @@ else:
         def clear(self):
             self.__end = end = []
             end += [None, end, end]  # sentinel node for doubly linked list
-            self.__map = {}          # key --> [key, prev, next]
+            self.__map = {}  # key --> [key, prev, next]
             dict.clear(self)
 
         def __setitem__(self, key, value):

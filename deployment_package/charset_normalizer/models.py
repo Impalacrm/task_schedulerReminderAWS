@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from encodings.aliases import aliases
 from hashlib import sha256
 from json import dumps
 from re import sub
 from typing import Any, Iterator, List, Tuple
+
+from encodings.aliases import aliases
 
 from .constant import RE_POSSIBLE_ENCODING_INDICATION, TOO_BIG_SEQUENCE
 from .utils import iana_name, is_multi_byte_encoding, unicode_range
@@ -12,14 +13,14 @@ from .utils import iana_name, is_multi_byte_encoding, unicode_range
 
 class CharsetMatch:
     def __init__(
-        self,
-        payload: bytes,
-        guessed_encoding: str,
-        mean_mess_ratio: float,
-        has_sig_or_bom: bool,
-        languages: CoherenceMatches,
-        decoded_payload: str | None = None,
-        preemptive_declaration: str | None = None,
+            self,
+            payload: bytes,
+            guessed_encoding: str,
+            mean_mess_ratio: float,
+            has_sig_or_bom: bool,
+            languages: CoherenceMatches,
+            decoded_payload: str | None = None,
+            preemptive_declaration: str | None = None,
     ):
         self._payload: bytes = payload
 
@@ -214,13 +215,13 @@ class CharsetMatch:
             self._output_encoding = encoding
             decoded_string = str(self)
             if (
-                self._preemptive_declaration is not None
-                and self._preemptive_declaration.lower()
-                not in ["utf-8", "utf8", "utf_8"]
+                    self._preemptive_declaration is not None
+                    and self._preemptive_declaration.lower()
+                    not in ["utf-8", "utf8", "utf_8"]
             ):
                 patched_header = sub(
                     RE_POSSIBLE_ENCODING_INDICATION,
-                    lambda m: m.string[m.span()[0] : m.span()[1]].replace(
+                    lambda m: m.string[m.span()[0]: m.span()[1]].replace(
                         m.groups()[0],
                         iana_name(self._output_encoding).replace("_", "-"),  # type: ignore[arg-type]
                     ),
@@ -315,18 +316,18 @@ CoherenceMatches = List[CoherenceMatch]
 
 class CliDetectionResult:
     def __init__(
-        self,
-        path: str,
-        encoding: str | None,
-        encoding_aliases: list[str],
-        alternative_encodings: list[str],
-        language: str,
-        alphabets: list[str],
-        has_sig_or_bom: bool,
-        chaos: float,
-        coherence: float,
-        unicode_path: str | None,
-        is_preferred: bool,
+            self,
+            path: str,
+            encoding: str | None,
+            encoding_aliases: list[str],
+            alternative_encodings: list[str],
+            language: str,
+            alphabets: list[str],
+            has_sig_or_bom: bool,
+            chaos: float,
+            coherence: float,
+            unicode_path: str | None,
+            is_preferred: bool,
     ):
         self.path: str = path
         self.unicode_path: str | None = unicode_path

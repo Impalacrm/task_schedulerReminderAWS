@@ -8,42 +8,9 @@ from time import localtime
 from warnings import warn
 
 from pg8000.converters import (
-    BIGINT,
-    BOOLEAN,
-    BOOLEAN_ARRAY,
-    BYTES,
-    CHAR,
-    CHAR_ARRAY,
-    DATE,
-    FLOAT,
-    FLOAT_ARRAY,
-    INET,
-    INT2VECTOR,
-    INTEGER,
-    INTEGER_ARRAY,
-    INTERVAL,
-    JSON,
-    JSONB,
-    MACADDR,
-    NAME,
-    NAME_ARRAY,
-    NULLTYPE,
-    NUMERIC,
-    NUMERIC_ARRAY,
     OID,
-    PGInterval,
     PY_PG,
-    STRING,
-    TEXT,
-    TEXT_ARRAY,
-    TIME,
-    TIMESTAMP,
-    TIMESTAMPTZ,
     UNKNOWN,
-    UUID_TYPE,
-    VARCHAR,
-    VARCHAR_ARRAY,
-    XID,
 )
 from pg8000.core import (
     Context,
@@ -53,8 +20,6 @@ from pg8000.core import (
     ver,
 )
 from pg8000.exceptions import DatabaseError, Error, InterfaceError
-from pg8000.types import Range
-
 
 __version__ = ver
 
@@ -88,7 +53,6 @@ __version__ = ver
 
 __author__ = "Mathieu Fenniak"
 
-
 ROWID = OID
 
 apilevel = "2.0"
@@ -109,7 +73,6 @@ This property is part of the `DBAPI 2.0 specification
 """
 
 paramstyle = "format"
-
 
 BINARY = bytes
 
@@ -194,19 +157,19 @@ def Binary(value):
 
 
 def connect(
-    user,
-    host="localhost",
-    database=None,
-    port=5432,
-    password=None,
-    source_address=None,
-    unix_sock=None,
-    ssl_context=None,
-    timeout=None,
-    tcp_keepalive=True,
-    application_name=None,
-    replication=None,
-    sock=None,
+        user,
+        host="localhost",
+        database=None,
+        port=5432,
+        password=None,
+        source_address=None,
+        unix_sock=None,
+        ssl_context=None,
+        timeout=None,
+        tcp_keepalive=True,
+        application_name=None,
+        replication=None,
+        sock=None,
 ):
     return Connection(
         user,
@@ -288,7 +251,7 @@ def convert_paramstyle(style, query, args):
             elif style == "qmark" and c == "?":
                 output_query.append(next(param_idx))
             elif (
-                style == "numeric" and c == ":" and next_c not in ":=" and prev_c != ":"
+                    style == "numeric" and c == ":" and next_c not in ":=" and prev_c != ":"
             ):
                 # Treat : as beginning of parameter name if and only
                 # if it's the only : around

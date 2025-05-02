@@ -98,10 +98,10 @@ class ConnectionPool:
         return self
 
     def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
+            self,
+            exc_type: type[BaseException] | None,
+            exc_val: BaseException | None,
+            exc_tb: TracebackType | None,
     ) -> typing.Literal[False]:
         self.close()
         # Return False to re-raise any potential exceptions
@@ -173,18 +173,18 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
     ConnectionCls: type[BaseHTTPConnection] | type[BaseHTTPSConnection] = HTTPConnection
 
     def __init__(
-        self,
-        host: str,
-        port: int | None = None,
-        timeout: _TYPE_TIMEOUT | None = _DEFAULT_TIMEOUT,
-        maxsize: int = 1,
-        block: bool = False,
-        headers: typing.Mapping[str, str] | None = None,
-        retries: Retry | bool | int | None = None,
-        _proxy: Url | None = None,
-        _proxy_headers: typing.Mapping[str, str] | None = None,
-        _proxy_config: ProxyConfig | None = None,
-        **conn_kw: typing.Any,
+            self,
+            host: str,
+            port: int | None = None,
+            timeout: _TYPE_TIMEOUT | None = _DEFAULT_TIMEOUT,
+            maxsize: int = 1,
+            block: bool = False,
+            headers: typing.Mapping[str, str] | None = None,
+            retries: Retry | bool | int | None = None,
+            _proxy: Url | None = None,
+            _proxy_headers: typing.Mapping[str, str] | None = None,
+            _proxy_config: ProxyConfig | None = None,
+            **conn_kw: typing.Any,
     ):
         ConnectionPool.__init__(self, host, port)
         RequestMethods.__init__(self, headers)
@@ -356,10 +356,10 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
             return Timeout.from_float(timeout)
 
     def _raise_timeout(
-        self,
-        err: BaseSSLError | OSError | SocketTimeout,
-        url: str,
-        timeout_value: _TYPE_TIMEOUT | None,
+            self,
+            err: BaseSSLError | OSError | SocketTimeout,
+            url: str,
+            timeout_value: _TYPE_TIMEOUT | None,
     ) -> None:
         """Is the error actually a timeout? Will raise a ReadTimeout or pass"""
 
@@ -375,19 +375,19 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
             ) from err
 
     def _make_request(
-        self,
-        conn: BaseHTTPConnection,
-        method: str,
-        url: str,
-        body: _TYPE_BODY | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        retries: Retry | None = None,
-        timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
-        chunked: bool = False,
-        response_conn: BaseHTTPConnection | None = None,
-        preload_content: bool = True,
-        decode_content: bool = True,
-        enforce_content_length: bool = True,
+            self,
+            conn: BaseHTTPConnection,
+            method: str,
+            url: str,
+            body: _TYPE_BODY | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            retries: Retry | None = None,
+            timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
+            chunked: bool = False,
+            response_conn: BaseHTTPConnection | None = None,
+            preload_content: bool = True,
+            decode_content: bool = True,
+            enforce_content_length: bool = True,
     ) -> BaseHTTPResponse:
         """
         Perform a request on a given urllib connection object taken from our
@@ -469,12 +469,12 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
         # _validate_conn() starts the connection to an HTTPS proxy
         # so we need to wrap errors with 'ProxyError' here too.
         except (
-            OSError,
-            NewConnectionError,
-            TimeoutError,
-            BaseSSLError,
-            CertificateError,
-            SSLError,
+                OSError,
+                NewConnectionError,
+                TimeoutError,
+                BaseSSLError,
+                CertificateError,
+                SSLError,
         ) as e:
             new_e: Exception = e
             if isinstance(e, (BaseSSLError, CertificateError)):
@@ -482,7 +482,7 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
             # If the connection didn't successfully connect to it's proxy
             # then there
             if isinstance(
-                new_e, (OSError, NewConnectionError, TimeoutError, SSLError)
+                    new_e, (OSError, NewConnectionError, TimeoutError, SSLError)
             ) and (conn and conn.proxy and not conn.has_connected_to_proxy):
                 new_e = _wrap_proxy_error(new_e, conn.proxy.scheme)
             raise new_e
@@ -590,22 +590,22 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
         return (scheme, host, port) == (self.scheme, self.host, self.port)
 
     def urlopen(  # type: ignore[override]
-        self,
-        method: str,
-        url: str,
-        body: _TYPE_BODY | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        retries: Retry | bool | int | None = None,
-        redirect: bool = True,
-        assert_same_host: bool = True,
-        timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
-        pool_timeout: int | None = None,
-        release_conn: bool | None = None,
-        chunked: bool = False,
-        body_pos: _TYPE_BODY_POSITION | None = None,
-        preload_content: bool = True,
-        decode_content: bool = True,
-        **response_kw: typing.Any,
+            self,
+            method: str,
+            url: str,
+            body: _TYPE_BODY | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            retries: Retry | bool | int | None = None,
+            redirect: bool = True,
+            assert_same_host: bool = True,
+            timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
+            pool_timeout: int | None = None,
+            release_conn: bool | None = None,
+            chunked: bool = False,
+            body_pos: _TYPE_BODY_POSITION | None = None,
+            preload_content: bool = True,
+            decode_content: bool = True,
+            **response_kw: typing.Any,
     ) -> BaseHTTPResponse:
         """
         Get a connection from the pool and perform an HTTP request. This is the
@@ -809,14 +809,14 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
             raise
 
         except (
-            TimeoutError,
-            HTTPException,
-            OSError,
-            ProtocolError,
-            BaseSSLError,
-            SSLError,
-            CertificateError,
-            ProxyError,
+                TimeoutError,
+                HTTPException,
+                OSError,
+                ProtocolError,
+                BaseSSLError,
+                SSLError,
+                CertificateError,
+                ProxyError,
         ) as e:
             # Discard the connection for these exceptions. It will be
             # replaced during the next _get_conn() call.
@@ -825,14 +825,14 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
             if isinstance(e, (BaseSSLError, CertificateError)):
                 new_e = SSLError(e)
             if isinstance(
-                new_e,
-                (
-                    OSError,
-                    NewConnectionError,
-                    TimeoutError,
-                    SSLError,
-                    HTTPException,
-                ),
+                    new_e,
+                    (
+                            OSError,
+                            NewConnectionError,
+                            TimeoutError,
+                            SSLError,
+                            HTTPException,
+                    ),
             ) and (conn and conn.proxy and not conn.has_connected_to_proxy):
                 new_e = _wrap_proxy_error(new_e, conn.proxy.scheme)
             elif isinstance(new_e, (OSError, HTTPException)):
@@ -978,28 +978,28 @@ class HTTPSConnectionPool(HTTPConnectionPool):
     ConnectionCls: type[BaseHTTPSConnection] = HTTPSConnection
 
     def __init__(
-        self,
-        host: str,
-        port: int | None = None,
-        timeout: _TYPE_TIMEOUT | None = _DEFAULT_TIMEOUT,
-        maxsize: int = 1,
-        block: bool = False,
-        headers: typing.Mapping[str, str] | None = None,
-        retries: Retry | bool | int | None = None,
-        _proxy: Url | None = None,
-        _proxy_headers: typing.Mapping[str, str] | None = None,
-        key_file: str | None = None,
-        cert_file: str | None = None,
-        cert_reqs: int | str | None = None,
-        key_password: str | None = None,
-        ca_certs: str | None = None,
-        ssl_version: int | str | None = None,
-        ssl_minimum_version: ssl.TLSVersion | None = None,
-        ssl_maximum_version: ssl.TLSVersion | None = None,
-        assert_hostname: str | typing.Literal[False] | None = None,
-        assert_fingerprint: str | None = None,
-        ca_cert_dir: str | None = None,
-        **conn_kw: typing.Any,
+            self,
+            host: str,
+            port: int | None = None,
+            timeout: _TYPE_TIMEOUT | None = _DEFAULT_TIMEOUT,
+            maxsize: int = 1,
+            block: bool = False,
+            headers: typing.Mapping[str, str] | None = None,
+            retries: Retry | bool | int | None = None,
+            _proxy: Url | None = None,
+            _proxy_headers: typing.Mapping[str, str] | None = None,
+            key_file: str | None = None,
+            cert_file: str | None = None,
+            cert_reqs: int | str | None = None,
+            key_password: str | None = None,
+            ca_certs: str | None = None,
+            ssl_version: int | str | None = None,
+            ssl_minimum_version: ssl.TLSVersion | None = None,
+            ssl_maximum_version: ssl.TLSVersion | None = None,
+            assert_hostname: str | typing.Literal[False] | None = None,
+            assert_fingerprint: str | None = None,
+            ca_cert_dir: str | None = None,
+            **conn_kw: typing.Any,
     ) -> None:
         super().__init__(
             host,
@@ -1161,7 +1161,7 @@ def _normalize_host(host: str | None, scheme: str | None) -> str | None:
 
 
 def _url_from_pool(
-    pool: HTTPConnectionPool | HTTPSConnectionPool, path: str | None = None
+        pool: HTTPConnectionPool | HTTPSConnectionPool, path: str | None = None
 ) -> str:
     """Returns the URL from a given connection pool. This is mainly used for testing and logging."""
     return Url(scheme=pool.scheme, host=pool.host, port=pool.port, path=path).url

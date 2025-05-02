@@ -52,14 +52,14 @@ class RequestMethods:
         self.headers = headers or {}
 
     def urlopen(
-        self,
-        method: str,
-        url: str,
-        body: _TYPE_BODY | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        encode_multipart: bool = True,
-        multipart_boundary: str | None = None,
-        **kw: typing.Any,
+            self,
+            method: str,
+            url: str,
+            body: _TYPE_BODY | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            encode_multipart: bool = True,
+            multipart_boundary: str | None = None,
+            **kw: typing.Any,
     ) -> BaseHTTPResponse:  # Abstract
         raise NotImplementedError(
             "Classes extending RequestMethods must implement "
@@ -67,14 +67,14 @@ class RequestMethods:
         )
 
     def request(
-        self,
-        method: str,
-        url: str,
-        body: _TYPE_BODY | None = None,
-        fields: _TYPE_FIELDS | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        json: typing.Any | None = None,
-        **urlopen_kw: typing.Any,
+            self,
+            method: str,
+            url: str,
+            body: _TYPE_BODY | None = None,
+            fields: _TYPE_FIELDS | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            json: typing.Any | None = None,
+            **urlopen_kw: typing.Any,
     ) -> BaseHTTPResponse:
         """
         Make a request using :meth:`urlopen` with the appropriate encoding of
@@ -145,12 +145,12 @@ class RequestMethods:
             )
 
     def request_encode_url(
-        self,
-        method: str,
-        url: str,
-        fields: _TYPE_ENCODE_URL_FIELDS | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        **urlopen_kw: str,
+            self,
+            method: str,
+            url: str,
+            fields: _TYPE_ENCODE_URL_FIELDS | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            **urlopen_kw: str,
     ) -> BaseHTTPResponse:
         """
         Make a request using :meth:`urlopen` with the ``fields`` encoded in
@@ -182,14 +182,14 @@ class RequestMethods:
         return self.urlopen(method, url, **extra_kw)
 
     def request_encode_body(
-        self,
-        method: str,
-        url: str,
-        fields: _TYPE_FIELDS | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        encode_multipart: bool = True,
-        multipart_boundary: str | None = None,
-        **urlopen_kw: str,
+            self,
+            method: str,
+            url: str,
+            fields: _TYPE_FIELDS | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            encode_multipart: bool = True,
+            multipart_boundary: str | None = None,
+            **urlopen_kw: str,
     ) -> BaseHTTPResponse:
         """
         Make a request using :meth:`urlopen` with the ``fields`` encoded in

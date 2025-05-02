@@ -1,7 +1,7 @@
-import logging
-from reminder import check_due_tasks
 import json
+import logging
 
+from reminder import check_due_tasks
 
 
 def lambda_handler(event, context):
@@ -24,8 +24,3 @@ def lambda_handler(event, context):
             "statusCode": 500,
             "body": json.dumps({"error": "Internal server error"})
         }
-
-
-
-
-

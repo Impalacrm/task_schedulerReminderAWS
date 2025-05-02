@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-from ._parser import parse, parser, parserinfo, ParserError
 from ._parser import DEFAULTPARSER, DEFAULTTZPARSER
 from ._parser import UnknownTimezoneWarning
-
-from ._parser import __doc__
-
+from ._parser import parse, parser, parserinfo, ParserError
 from .isoparser import isoparser, isoparse
 
 __all__ = ['parse', 'parser', 'parserinfo',
@@ -32,6 +29,7 @@ def __deprecated_private_func(f):
         return f(*args, **kwargs)
 
     return deprecated_func
+
 
 def __deprecate_private_class(c):
     import warnings

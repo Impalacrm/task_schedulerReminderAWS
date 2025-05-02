@@ -313,7 +313,7 @@ class RequestsCookieJar(cookielib.CookieJar, MutableMapping):
         dictionary = {}
         for cookie in iter(self):
             if (domain is None or cookie.domain == domain) and (
-                path is None or cookie.path == path
+                    path is None or cookie.path == path
             ):
                 dictionary[cookie.name] = cookie.value
         return dictionary
@@ -348,9 +348,9 @@ class RequestsCookieJar(cookielib.CookieJar, MutableMapping):
 
     def set_cookie(self, cookie, *args, **kwargs):
         if (
-            hasattr(cookie.value, "startswith")
-            and cookie.value.startswith('"')
-            and cookie.value.endswith('"')
+                hasattr(cookie.value, "startswith")
+                and cookie.value.startswith('"')
+                and cookie.value.endswith('"')
         ):
             cookie.value = cookie.value.replace('\\"', "")
         return super().set_cookie(cookie, *args, **kwargs)

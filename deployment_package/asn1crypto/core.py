@@ -48,13 +48,13 @@ Other type classes are defined that help compose the types listed above.
 
 from __future__ import unicode_literals, division, absolute_import, print_function
 
-from datetime import datetime, timedelta
-from fractions import Fraction
 import binascii
 import copy
 import math
 import re
 import sys
+from datetime import datetime, timedelta
+from fractions import Fraction
 
 from . import _teletex_codec
 from ._errors import unwrap
@@ -74,9 +74,7 @@ else:
 
     _PY2 = False
 
-
 _teletex_codec.register()
-
 
 CLASS_NUM_TO_NAME_MAP = {
     0: 'universal',
@@ -101,9 +99,7 @@ METHOD_NUM_TO_NAME_MAP = {
     1: 'constructed',
 }
 
-
 _OID_RE = re.compile(r'^\d+(\.\d+)*$')
-
 
 # A global tracker to ensure that _setup() is called for every class, even
 # if is has been called for a parent class. This allows different _fields
@@ -292,7 +288,7 @@ class Asn1Value(object):
                 # Allow explicit to be specified as a simple 2-element tuple
                 # instead of requiring the user make a nested tuple
                 if cls.explicit is not None and isinstance(cls.explicit[0], int_types):
-                    cls.explicit = (cls.explicit, )
+                    cls.explicit = (cls.explicit,)
                 if hasattr(cls, '_setup'):
                     self._setup()
                 _SETUP_CLASSES[cls] = True
@@ -337,7 +333,7 @@ class Asn1Value(object):
             if explicit is not None:
                 # Ensure we have a tuple of 2-element tuples
                 if len(explicit) == 2 and isinstance(explicit[1], int_types):
-                    explicit = (explicit, )
+                    explicit = (explicit,)
                 for class_, tag in explicit:
                     invalid_class = None
                     if isinstance(class_, int_types):
@@ -364,9 +360,9 @@ class Asn1Value(object):
                                 type_name(tag)
                             ))
                     if self.explicit is None:
-                        self.explicit = ((class_, tag), )
+                        self.explicit = ((class_, tag),)
                     else:
-                        self.explicit = self.explicit + ((class_, tag), )
+                        self.explicit = self.explicit + ((class_, tag),)
 
             elif implicit is not None:
                 class_, tag = implicit
@@ -2712,7 +2708,6 @@ class IntegerOctetString(Constructable, Castable, Primitive):
 
 
 class ParsableOctetString(Constructable, Castable, Primitive):
-
     tag = 4
 
     _parsed = None
@@ -2890,7 +2885,6 @@ class ParsableOctetString(Constructable, Castable, Primitive):
 
 
 class ParsableOctetBitString(ParsableOctetString):
-
     tag = 3
 
     def set(self, value):
@@ -3892,7 +3886,7 @@ class Sequence(Asn1Value):
 
                 if field < field_len:
                     _, field_spec, value_spec, field_params, spec_override = (
-                        cls._precomputed_specs[field] or self._determine_spec(field))
+                            cls._precomputed_specs[field] or self._determine_spec(field))
 
                     # If the next value is optional or default, allow it to be absent
                     if field_params and ('optional' in field_params or 'default' in field_params):
@@ -4682,7 +4676,7 @@ class Set(Sequence):
                     ))
 
                 _, field_spec, value_spec, field_params, spec_override = (
-                    cls._precomputed_specs[field] or self._determine_spec(field))
+                        cls._precomputed_specs[field] or self._determine_spec(field))
 
                 if field_spec is None or (spec_override and issubclass(field_spec, Any)):
                     field_spec = value_spec
@@ -4708,7 +4702,7 @@ class Set(Sequence):
                     continue
 
                 name, field_spec, value_spec, field_params, spec_override = (
-                    cls._precomputed_specs[index] or self._determine_spec(index))
+                        cls._precomputed_specs[index] or self._determine_spec(index))
 
                 if field_spec is None or (spec_override and issubclass(field_spec, Any)):
                     field_spec = value_spec

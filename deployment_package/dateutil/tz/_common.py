@@ -1,9 +1,7 @@
-from six import PY2
-
+from datetime import datetime, timedelta, tzinfo
 from functools import wraps
 
-from datetime import datetime, timedelta, tzinfo
-
+from six import PY2
 
 ZERO = timedelta(0)
 
@@ -99,6 +97,7 @@ else:
         def fold(self):
             return 1
 
+
     def enfold(dt, fold=1):
         """
         Provides a unified interface for assigning the ``fold`` attribute to
@@ -134,6 +133,7 @@ def _validate_fromutc_inputs(f):
     The CPython version of ``fromutc`` checks that the input is a ``datetime``
     object and that ``self`` is attached as its ``tzinfo``.
     """
+
     @wraps(f)
     def fromutc(self, dt):
         if not isinstance(dt, datetime):
@@ -286,6 +286,7 @@ class tzrangebase(_tzinfo):
 
     .. versionadded:: 2.6.0
     """
+
     def __init__(self):
         raise NotImplementedError('tzrangebase is an abstract base class')
 

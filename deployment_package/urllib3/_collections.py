@@ -12,14 +12,13 @@ if typing.TYPE_CHECKING:
 
     from typing_extensions import Self
 
+
     class HasGettableStringKeys(Protocol):
         def keys(self) -> typing.Iterator[str]: ...
 
         def __getitem__(self, key: str) -> str: ...
 
-
 __all__ = ["RecentlyUsedContainer", "HTTPHeaderDict"]
-
 
 # Key type
 _KT = typing.TypeVar("_KT")
@@ -41,7 +40,7 @@ class _Sentinel(Enum):
 
 
 def ensure_can_construct_http_header_dict(
-    potential: object,
+        potential: object,
 ) -> ValidHTTPHeaderSource | None:
     if isinstance(potential, HTTPHeaderDict):
         return potential
@@ -80,9 +79,9 @@ class RecentlyUsedContainer(typing.Generic[_KT, _VT], typing.MutableMapping[_KT,
     lock: RLock
 
     def __init__(
-        self,
-        maxsize: int = 10,
-        dispose_func: typing.Callable[[_VT], None] | None = None,
+            self,
+            maxsize: int = 10,
+            dispose_func: typing.Callable[[_VT], None] | None = None,
     ) -> None:
         super().__init__()
         self._maxsize = maxsize
@@ -366,13 +365,15 @@ class HTTPHeaderDict(typing.MutableMapping[str, str]):
             self.add(key, value)
 
     @typing.overload
-    def getlist(self, key: str) -> list[str]: ...
+    def getlist(self, key: str) -> list[str]:
+        ...
 
     @typing.overload
-    def getlist(self, key: str, default: _DT) -> list[str] | _DT: ...
+    def getlist(self, key: str, default: _DT) -> list[str] | _DT:
+        ...
 
     def getlist(
-        self, key: str, default: _Sentinel | _DT = _Sentinel.not_passed
+            self, key: str, default: _Sentinel | _DT = _Sentinel.not_passed
     ) -> list[str] | _DT:
         """Returns a list of all the values for the named field. Returns an
         empty list if the key doesn't exist."""

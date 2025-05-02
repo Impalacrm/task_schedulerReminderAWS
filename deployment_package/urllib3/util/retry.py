@@ -9,6 +9,7 @@ import typing
 from itertools import takewhile
 from types import TracebackType
 
+from .util import reraise
 from ..exceptions import (
     ConnectTimeoutError,
     InvalidHeader,
@@ -18,7 +19,6 @@ from ..exceptions import (
     ReadTimeoutError,
     ResponseError,
 )
-from .util import reraise
 
 if typing.TYPE_CHECKING:
     from typing_extensions import Self
@@ -200,25 +200,25 @@ class Retry:
     DEFAULT: typing.ClassVar[Retry]
 
     def __init__(
-        self,
-        total: bool | int | None = 10,
-        connect: int | None = None,
-        read: int | None = None,
-        redirect: bool | int | None = None,
-        status: int | None = None,
-        other: int | None = None,
-        allowed_methods: typing.Collection[str] | None = DEFAULT_ALLOWED_METHODS,
-        status_forcelist: typing.Collection[int] | None = None,
-        backoff_factor: float = 0,
-        backoff_max: float = DEFAULT_BACKOFF_MAX,
-        raise_on_redirect: bool = True,
-        raise_on_status: bool = True,
-        history: tuple[RequestHistory, ...] | None = None,
-        respect_retry_after_header: bool = True,
-        remove_headers_on_redirect: typing.Collection[
-            str
-        ] = DEFAULT_REMOVE_HEADERS_ON_REDIRECT,
-        backoff_jitter: float = 0.0,
+            self,
+            total: bool | int | None = 10,
+            connect: int | None = None,
+            read: int | None = None,
+            redirect: bool | int | None = None,
+            status: int | None = None,
+            other: int | None = None,
+            allowed_methods: typing.Collection[str] | None = DEFAULT_ALLOWED_METHODS,
+            status_forcelist: typing.Collection[int] | None = None,
+            backoff_factor: float = 0,
+            backoff_max: float = DEFAULT_BACKOFF_MAX,
+            raise_on_redirect: bool = True,
+            raise_on_status: bool = True,
+            history: tuple[RequestHistory, ...] | None = None,
+            respect_retry_after_header: bool = True,
+            remove_headers_on_redirect: typing.Collection[
+                str
+            ] = DEFAULT_REMOVE_HEADERS_ON_REDIRECT,
+            backoff_jitter: float = 0.0,
     ) -> None:
         self.total = total
         self.connect = connect
@@ -269,10 +269,10 @@ class Retry:
 
     @classmethod
     def from_int(
-        cls,
-        retries: Retry | bool | int | None,
-        redirect: bool | int | None = True,
-        default: Retry | bool | int | None = None,
+            cls,
+            retries: Retry | bool | int | None,
+            redirect: bool | int | None = True,
+            default: Retry | bool | int | None = None,
     ) -> Retry:
         """Backwards-compatibility for the old retries format."""
         if retries is None:
@@ -385,7 +385,7 @@ class Retry:
         return True
 
     def is_retry(
-        self, method: str, status_code: int, has_retry_after: bool = False
+            self, method: str, status_code: int, has_retry_after: bool = False
     ) -> bool:
         """Is this method/status code retryable? (Based on allowlists and control
         variables such as the number of total retries to allow, whether to
@@ -426,13 +426,13 @@ class Retry:
         return min(retry_counts) < 0
 
     def increment(
-        self,
-        method: str | None = None,
-        url: str | None = None,
-        response: BaseHTTPResponse | None = None,
-        error: Exception | None = None,
-        _pool: ConnectionPool | None = None,
-        _stacktrace: TracebackType | None = None,
+            self,
+            method: str | None = None,
+            url: str | None = None,
+            response: BaseHTTPResponse | None = None,
+            error: Exception | None = None,
+            _pool: ConnectionPool | None = None,
+            _stacktrace: TracebackType | None = None,
     ) -> Self:
         """Return a new Retry object with incremented retry counters.
 

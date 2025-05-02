@@ -22,8 +22,8 @@ from stringprep import (
 from uuid import uuid4
 
 from asn1crypto.x509 import Certificate
-
 from scramp.utils import b64dec, b64enc, h, hi, hmac, uenc, xor
+
 
 # https://tools.ietf.org/html/rfc5802
 # https://www.rfc-editor.org/rfc/rfc7677.txt
@@ -78,7 +78,6 @@ MECHANISMS = (
     "SCRAM-SHA3-512",
     "SCRAM-SHA3-512-PLUS",
 )
-
 
 CHANNEL_TYPES = (
     "tls-server-end-point",
@@ -201,7 +200,7 @@ def _validate_channel_binding(channel_binding):
 
 class ScramClient:
     def __init__(
-        self, mechanisms, username, password, channel_binding=None, c_nonce=None
+            self, mechanisms, username, password, channel_binding=None, c_nonce=None
     ):
         if not isinstance(mechanisms, (list, tuple)):
             raise ScramException(
@@ -510,7 +509,7 @@ def _set_client_first(client_first, s_nonce, channel_binding, use_binding):
             SERVER_ERROR_OTHER_ERROR,
         )
 
-    client_first_bare = client_first[second_comma + 1 :]
+    client_first_bare = client_first[second_comma + 1:]
     msg = _parse_message(client_first_bare, "client first bare", "nr")
 
     c_nonce = msg["r"]
@@ -540,15 +539,15 @@ def _set_server_first(server_first, c_nonce):
 
 
 def _get_client_final(
-    hf,
-    password,
-    salt_str,
-    iterations,
-    nonce,
-    client_first_bare,
-    server_first,
-    channel_binding,
-    use_binding,
+        hf,
+        password,
+        salt_str,
+        iterations,
+        nonce,
+        client_first_bare,
+        server_first,
+        channel_binding,
+        use_binding,
 ):
     salt = b64dec(salt_str)
     salted_password = _make_salted_password(hf, password, salt, iterations)
@@ -585,15 +584,15 @@ SERVER_ERROR_OTHER_ERROR = "other-error"
 
 
 def _set_client_final(
-    hf,
-    client_final,
-    s_nonce,
-    stored_key,
-    server_key,
-    client_first_bare,
-    server_first,
-    channel_binding,
-    use_binding,
+        hf,
+        client_final,
+        s_nonce,
+        stored_key,
+        server_key,
+        client_first_bare,
+        server_first,
+        channel_binding,
+        use_binding,
 ):
     msg = _parse_message(client_final, "client final", "crp")
     chan_binding = msg["c"]
@@ -601,7 +600,7 @@ def _set_client_final(
     nonce = msg["r"]
     proof = msg["p"]
     if use_binding and b64dec(chan_binding) != _make_cbind_input(
-        channel_binding, use_binding
+            channel_binding, use_binding
     ):
         raise ScramException(
             "The channel bindings don't match.",
@@ -677,16 +676,16 @@ def saslprep(source):
 
         # check for forbidden chars
         for f, msg in (
-            (in_table_a1, "unassigned code points forbidden"),
-            (in_table_c21_c22, "control characters forbidden"),
-            (in_table_c3, "private use characters forbidden"),
-            (in_table_c4, "non-char code points forbidden"),
-            (in_table_c5, "surrogate codes forbidden"),
-            (in_table_c6, "non-plaintext chars forbidden"),
-            (in_table_c7, "non-canonical chars forbidden"),
-            (in_table_c8, "display-modifying/deprecated chars forbidden"),
-            (in_table_c9, "tagged characters forbidden"),
-            (is_forbidden_bidi_char, "forbidden bidi character"),
+                (in_table_a1, "unassigned code points forbidden"),
+                (in_table_c21_c22, "control characters forbidden"),
+                (in_table_c3, "private use characters forbidden"),
+                (in_table_c4, "non-char code points forbidden"),
+                (in_table_c5, "surrogate codes forbidden"),
+                (in_table_c6, "non-plaintext chars forbidden"),
+                (in_table_c7, "non-canonical chars forbidden"),
+                (in_table_c8, "display-modifying/deprecated chars forbidden"),
+                (in_table_c9, "tagged characters forbidden"),
+                (is_forbidden_bidi_char, "forbidden bidi character"),
         ):
             if f(c):
                 raise ScramException(msg, SERVER_ERROR_INVALID_ENCODING)

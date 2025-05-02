@@ -28,7 +28,6 @@ from .exceptions import (
     TooManyRedirects,
 )
 from .hooks import default_hooks, dispatch_hook
-
 # formerly defined here, reexposed here for backward compatibility
 from .models import (  # noqa: F401
     DEFAULT_REDIRECT_LIMIT,
@@ -72,7 +71,7 @@ def merge_setting(request_setting, session_setting, dict_class=OrderedDict):
 
     # Bypass if not a dictionary (e.g. verify)
     if not (
-        isinstance(session_setting, Mapping) and isinstance(request_setting, Mapping)
+            isinstance(session_setting, Mapping) and isinstance(request_setting, Mapping)
     ):
         return request_setting
 
@@ -135,10 +134,10 @@ class SessionRedirectMixin:
         # breaking backwards compatibility with older versions of requests
         # that allowed any redirects on the same host.
         if (
-            old_parsed.scheme == "http"
-            and old_parsed.port in (80, None)
-            and new_parsed.scheme == "https"
-            and new_parsed.port in (443, None)
+                old_parsed.scheme == "http"
+                and old_parsed.port in (80, None)
+                and new_parsed.scheme == "https"
+                and new_parsed.port in (443, None)
         ):
             return False
 
@@ -147,9 +146,9 @@ class SessionRedirectMixin:
         changed_scheme = old_parsed.scheme != new_parsed.scheme
         default_port = (DEFAULT_PORTS.get(old_parsed.scheme, None), None)
         if (
-            not changed_scheme
-            and old_parsed.port in default_port
-            and new_parsed.port in default_port
+                not changed_scheme
+                and old_parsed.port in default_port
+                and new_parsed.port in default_port
         ):
             return False
 
@@ -157,16 +156,16 @@ class SessionRedirectMixin:
         return changed_port or changed_scheme
 
     def resolve_redirects(
-        self,
-        resp,
-        req,
-        stream=False,
-        timeout=None,
-        verify=True,
-        cert=None,
-        proxies=None,
-        yield_requests=False,
-        **adapter_kwargs,
+            self,
+            resp,
+            req,
+            stream=False,
+            timeout=None,
+            verify=True,
+            cert=None,
+            proxies=None,
+            yield_requests=False,
+            **adapter_kwargs,
     ):
         """Receives a Response. Returns a generator of Responses or Requests."""
 
@@ -222,8 +221,8 @@ class SessionRedirectMixin:
 
             # https://github.com/psf/requests/issues/1084
             if resp.status_code not in (
-                codes.temporary_redirect,
-                codes.permanent_redirect,
+                    codes.temporary_redirect,
+                    codes.permanent_redirect,
             ):
                 # https://github.com/psf/requests/issues/3490
                 purged_headers = ("Content-Length", "Content-Type", "Transfer-Encoding")
@@ -249,7 +248,7 @@ class SessionRedirectMixin:
             # value ensures `rewindable` will be True, allowing us to raise an
             # UnrewindableBodyError, instead of hanging the connection.
             rewindable = prepared_request._body_position is not None and (
-                "Content-Length" in headers or "Transfer-Encoding" in headers
+                    "Content-Length" in headers or "Transfer-Encoding" in headers
             )
 
             # Attempt to rewind consumed file-like object.
@@ -288,7 +287,7 @@ class SessionRedirectMixin:
         url = prepared_request.url
 
         if "Authorization" in headers and self.should_strip_auth(
-            response.request.url, url
+                response.request.url, url
         ):
             # If we get redirected to a new host, we should strip out any
             # authentication headers.
@@ -498,23 +497,23 @@ class Session(SessionRedirectMixin):
         return p
 
     def request(
-        self,
-        method,
-        url,
-        params=None,
-        data=None,
-        headers=None,
-        cookies=None,
-        files=None,
-        auth=None,
-        timeout=None,
-        allow_redirects=True,
-        proxies=None,
-        hooks=None,
-        stream=None,
-        verify=None,
-        cert=None,
-        json=None,
+            self,
+            method,
+            url,
+            params=None,
+            data=None,
+            headers=None,
+            cookies=None,
+            files=None,
+            auth=None,
+            timeout=None,
+            allow_redirects=True,
+            proxies=None,
+            hooks=None,
+            stream=None,
+            verify=None,
+            cert=None,
+            json=None,
     ):
         """Constructs a :class:`Request <Request>`, prepares it and sends it.
         Returns :class:`Response <Response>` object.
@@ -765,9 +764,9 @@ class Session(SessionRedirectMixin):
             # and be compatible with cURL.
             if verify is True or verify is None:
                 verify = (
-                    os.environ.get("REQUESTS_CA_BUNDLE")
-                    or os.environ.get("CURL_CA_BUNDLE")
-                    or verify
+                        os.environ.get("REQUESTS_CA_BUNDLE")
+                        or os.environ.get("CURL_CA_BUNDLE")
+                        or verify
                 )
 
         # Merge all the kwargs.

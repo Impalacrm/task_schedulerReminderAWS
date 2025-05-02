@@ -10,11 +10,11 @@ def load_ipython_extension(ipython: Any) -> None:
 
 
 def get_cli_string(
-    path: Optional[str] = None,
-    action: Optional[str] = None,
-    key: Optional[str] = None,
-    value: Optional[str] = None,
-    quote: Optional[str] = None,
+        path: Optional[str] = None,
+        action: Optional[str] = None,
+        key: Optional[str] = None,
+        value: Optional[str] = None,
+        quote: Optional[str] = None,
 ):
     """Returns a string suitable for running as a shell script.
 

@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import os
 import typing
-
 # use http.client.HTTPException for consistency with non-emscripten
 from http.client import HTTPException as HTTPException  # noqa: F401
 from http.client import ResponseNotReady
 
+from .fetch import _RequestError, _TimeoutError, send_request, send_streaming_request
+from .request import EmscriptenRequest
+from .response import EmscriptenHttpResponseWrapper, EmscriptenResponse
 from ..._base_connection import _TYPE_BODY
 from ...connection import HTTPConnection, ProxyConfig, port_by_scheme
 from ...exceptions import TimeoutError
@@ -14,9 +16,6 @@ from ...response import BaseHTTPResponse
 from ...util.connection import _TYPE_SOCKET_OPTIONS
 from ...util.timeout import _DEFAULT_TIMEOUT, _TYPE_TIMEOUT
 from ...util.url import Url
-from .fetch import _RequestError, _TimeoutError, send_request, send_streaming_request
-from .request import EmscriptenRequest
-from .response import EmscriptenHttpResponseWrapper, EmscriptenResponse
 
 if typing.TYPE_CHECKING:
     from ..._base_connection import BaseHTTPConnection, BaseHTTPSConnection
@@ -43,16 +42,16 @@ class EmscriptenHTTPConnection:
     _response: EmscriptenResponse | None
 
     def __init__(
-        self,
-        host: str,
-        port: int = 0,
-        *,
-        timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
-        source_address: tuple[str, int] | None = None,
-        blocksize: int = 8192,
-        socket_options: _TYPE_SOCKET_OPTIONS | None = None,
-        proxy: Url | None = None,
-        proxy_config: ProxyConfig | None = None,
+            self,
+            host: str,
+            port: int = 0,
+            *,
+            timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
+            source_address: tuple[str, int] | None = None,
+            blocksize: int = 8192,
+            socket_options: _TYPE_SOCKET_OPTIONS | None = None,
+            proxy: Url | None = None,
+            proxy_config: ProxyConfig | None = None,
     ) -> None:
         self.host = host
         self.port = port
@@ -70,11 +69,11 @@ class EmscriptenHTTPConnection:
         self.is_verified = False
 
     def set_tunnel(
-        self,
-        host: str,
-        port: int | None = 0,
-        headers: typing.Mapping[str, str] | None = None,
-        scheme: str = "http",
+            self,
+            host: str,
+            port: int | None = 0,
+            headers: typing.Mapping[str, str] | None = None,
+            scheme: str = "http",
     ) -> None:
         pass
 
@@ -82,19 +81,19 @@ class EmscriptenHTTPConnection:
         pass
 
     def request(
-        self,
-        method: str,
-        url: str,
-        body: _TYPE_BODY | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        # We know *at least* botocore is depending on the order of the
-        # first 3 parameters so to be safe we only mark the later ones
-        # as keyword-only to ensure we have space to extend.
-        *,
-        chunked: bool = False,
-        preload_content: bool = True,
-        decode_content: bool = True,
-        enforce_content_length: bool = True,
+            self,
+            method: str,
+            url: str,
+            body: _TYPE_BODY | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            # We know *at least* botocore is depending on the order of the
+            # first 3 parameters so to be safe we only mark the later ones
+            # as keyword-only to ensure we have space to extend.
+            *,
+            chunked: bool = False,
+            preload_content: bool = True,
+            decode_content: bool = True,
+            enforce_content_length: bool = True,
     ) -> None:
         self._closed = False
         if url.startswith("/"):
@@ -175,32 +174,32 @@ class EmscriptenHTTPSConnection(EmscriptenHTTPConnection):
     assert_fingerprint: str | None = None
 
     def __init__(
-        self,
-        host: str,
-        port: int = 0,
-        *,
-        timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
-        source_address: tuple[str, int] | None = None,
-        blocksize: int = 16384,
-        socket_options: (
-            None | _TYPE_SOCKET_OPTIONS
-        ) = HTTPConnection.default_socket_options,
-        proxy: Url | None = None,
-        proxy_config: ProxyConfig | None = None,
-        cert_reqs: int | str | None = None,
-        assert_hostname: None | str | typing.Literal[False] = None,
-        assert_fingerprint: str | None = None,
-        server_hostname: str | None = None,
-        ssl_context: typing.Any | None = None,
-        ca_certs: str | None = None,
-        ca_cert_dir: str | None = None,
-        ca_cert_data: None | str | bytes = None,
-        ssl_minimum_version: int | None = None,
-        ssl_maximum_version: int | None = None,
-        ssl_version: int | str | None = None,  # Deprecated
-        cert_file: str | None = None,
-        key_file: str | None = None,
-        key_password: str | None = None,
+            self,
+            host: str,
+            port: int = 0,
+            *,
+            timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
+            source_address: tuple[str, int] | None = None,
+            blocksize: int = 16384,
+            socket_options: (
+                    None | _TYPE_SOCKET_OPTIONS
+            ) = HTTPConnection.default_socket_options,
+            proxy: Url | None = None,
+            proxy_config: ProxyConfig | None = None,
+            cert_reqs: int | str | None = None,
+            assert_hostname: None | str | typing.Literal[False] = None,
+            assert_fingerprint: str | None = None,
+            server_hostname: str | None = None,
+            ssl_context: typing.Any | None = None,
+            ca_certs: str | None = None,
+            ca_cert_dir: str | None = None,
+            ca_cert_data: None | str | bytes = None,
+            ssl_minimum_version: int | None = None,
+            ssl_maximum_version: int | None = None,
+            ssl_version: int | str | None = None,  # Deprecated
+            cert_file: str | None = None,
+            key_file: str | None = None,
+            key_password: str | None = None,
     ) -> None:
         super().__init__(
             host,
@@ -235,16 +234,16 @@ class EmscriptenHTTPSConnection(EmscriptenHTTPConnection):
         self.is_verified = True
 
     def set_cert(
-        self,
-        key_file: str | None = None,
-        cert_file: str | None = None,
-        cert_reqs: int | str | None = None,
-        key_password: str | None = None,
-        ca_certs: str | None = None,
-        assert_hostname: None | str | typing.Literal[False] = None,
-        assert_fingerprint: str | None = None,
-        ca_cert_dir: str | None = None,
-        ca_cert_data: None | str | bytes = None,
+            self,
+            key_file: str | None = None,
+            cert_file: str | None = None,
+            cert_reqs: int | str | None = None,
+            key_password: str | None = None,
+            ca_certs: str | None = None,
+            assert_hostname: None | str | typing.Literal[False] = None,
+            assert_fingerprint: str | None = None,
+            ca_cert_dir: str | None = None,
+            ca_cert_data: None | str | bytes = None,
     ) -> None:
         pass
 

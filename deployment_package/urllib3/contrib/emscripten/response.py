@@ -8,10 +8,10 @@ from dataclasses import dataclass
 from http.client import HTTPException as HTTPException
 from io import BytesIO, IOBase
 
+from .request import EmscriptenRequest
 from ...exceptions import InvalidHeader, TimeoutError
 from ...response import BaseHTTPResponse
 from ...util.retry import Retry
-from .request import EmscriptenRequest
 
 if typing.TYPE_CHECKING:
     from ..._base_connection import BaseHTTPConnection, BaseHTTPSConnection
@@ -29,10 +29,10 @@ class EmscriptenResponse:
 
 class EmscriptenHttpResponseWrapper(BaseHTTPResponse):
     def __init__(
-        self,
-        internal_response: EmscriptenResponse,
-        url: str | None = None,
-        connection: BaseHTTPConnection | BaseHTTPSConnection | None = None,
+            self,
+            internal_response: EmscriptenResponse,
+            url: str | None = None,
+            connection: BaseHTTPConnection | BaseHTTPSConnection | None = None,
     ):
         self._pool = None  # set by pool class
         self._body = None
@@ -74,7 +74,7 @@ class EmscriptenHttpResponseWrapper(BaseHTTPResponse):
         self._retries = retries
 
     def stream(
-        self, amt: int | None = 2**16, decode_content: bool | None = None
+            self, amt: int | None = 2 ** 16, decode_content: bool | None = None
     ) -> typing.Generator[bytes]:
         """
         A generator wrapper for the read() method. A call will block until
@@ -128,24 +128,24 @@ class EmscriptenHttpResponseWrapper(BaseHTTPResponse):
 
         # Check for responses that shouldn't include a body
         if (
-            self.status in (204, 304)
-            or 100 <= self.status < 200
-            or request_method == "HEAD"
+                self.status in (204, 304)
+                or 100 <= self.status < 200
+                or request_method == "HEAD"
         ):
             length = 0
 
         return length
 
     def read(
-        self,
-        amt: int | None = None,
-        decode_content: bool | None = None,  # ignored because browser decodes always
-        cache_content: bool = False,
+            self,
+            amt: int | None = None,
+            decode_content: bool | None = None,  # ignored because browser decodes always
+            cache_content: bool = False,
     ) -> bytes:
         if (
-            self._closed
-            or self._response is None
-            or (isinstance(self._response.body, IOBase) and self._response.body.closed)
+                self._closed
+                or self._response is None
+                or (isinstance(self._response.body, IOBase) and self._response.body.closed)
         ):
             return b""
 
@@ -163,7 +163,7 @@ class EmscriptenHttpResponseWrapper(BaseHTTPResponse):
                 if self.length_remaining is not None:
                     self.length_remaining = max(self.length_remaining - len(data), 0)
                 if (self.length_is_certain and self.length_remaining == 0) or len(
-                    data
+                        data
                 ) < amt:
                     # definitely finished reading, close response stream
                     self._response.body.close()
@@ -175,16 +175,16 @@ class EmscriptenHttpResponseWrapper(BaseHTTPResponse):
                 if self.length_remaining is not None:
                     self.length_remaining = max(self.length_remaining - len(data), 0)
                 if len(data) == 0 or (
-                    self.length_is_certain and self.length_remaining == 0
+                        self.length_is_certain and self.length_remaining == 0
                 ):
                     # definitely finished reading, close response stream
                     self._response.body.close()
                 return typing.cast(bytes, data)
 
     def read_chunked(
-        self,
-        amt: int | None = None,
-        decode_content: bool | None = None,
+            self,
+            amt: int | None = None,
+            decode_content: bool | None = None,
     ) -> typing.Generator[bytes]:
         # chunked is handled by browser
         while True:
@@ -269,8 +269,8 @@ class EmscriptenHttpResponseWrapper(BaseHTTPResponse):
                 # The response may not be closed but we're not going to use it
                 # anymore so close it now
                 if (
-                    isinstance(self._response.body, IOBase)
-                    and not self._response.body.closed
+                        isinstance(self._response.body, IOBase)
+                        and not self._response.body.closed
                 ):
                     self._response.body.close()
                 # release the connection back to the pool
@@ -279,7 +279,7 @@ class EmscriptenHttpResponseWrapper(BaseHTTPResponse):
                 # If we have read everything from the response stream,
                 # return the connection back to the pool.
                 if (
-                    isinstance(self._response.body, IOBase)
-                    and self._response.body.closed
+                        isinstance(self._response.body, IOBase)
+                        and self._response.body.closed
                 ):
                     self.release_conn()

@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from codecs import BOM_UTF8, BOM_UTF16_BE, BOM_UTF16_LE, BOM_UTF32_BE, BOM_UTF32_LE
-from encodings.aliases import aliases
 from re import IGNORECASE
 from re import compile as re_compile
+
+from encodings.aliases import aliases
 
 # Contain for each eligible encoding a list of/item bytes SIG/BOM
 ENCODING_MARKS: dict[str, bytes | list[bytes]] = {
@@ -357,7 +358,6 @@ UNICODE_RANGES_COMBINED: dict[str, range] = {
     "Supplementary Private Use Area-B": range(1048576, 1114112),
 }
 
-
 UNICODE_SECONDARY_RANGE_KEYWORD: list[str] = [
     "Supplement",
     "Extended",
@@ -396,7 +396,7 @@ IANA_NO_ALIASES = [
 IANA_SUPPORTED: list[str] = sorted(
     filter(
         lambda x: x.endswith("_codec") is False
-        and x not in {"rot_13", "tactis", "mbcs"},
+                  and x not in {"rot_13", "tactis", "mbcs"},
         list(set(aliases.values())) + IANA_NO_ALIASES,
     )
 )
@@ -492,7 +492,6 @@ IANA_SUPPORTED_SIMILAR: dict[str, list[str]] = {
     "tis_620": ["iso8859_11"],
 }
 
-
 CHARDET_CORRESPONDENCE: dict[str, str] = {
     "iso2022_kr": "ISO-2022-KR",
     "iso2022_jp": "ISO-2022-JP",
@@ -528,7 +527,6 @@ CHARDET_CORRESPONDENCE: dict[str, str] = {
     "cp949": "CP949",
 }
 
-
 COMMON_SAFE_ASCII_CHARACTERS: set[str] = {
     "<",
     ">",
@@ -549,13 +547,11 @@ COMMON_SAFE_ASCII_CHARACTERS: set[str] = {
     ")",
 }
 
-
 KO_NAMES: set[str] = {"johab", "cp949", "euc_kr"}
 ZH_NAMES: set[str] = {"big5", "cp950", "big5hkscs", "hz"}
 
 # Logging LEVEL below DEBUG
 TRACE: int = 5
-
 
 # Language label that contain the em dash "—"
 # character are to be considered alternative seq to origin

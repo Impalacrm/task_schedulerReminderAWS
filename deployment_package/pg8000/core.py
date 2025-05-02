@@ -8,7 +8,6 @@ from itertools import count
 from struct import Struct
 
 import scramp
-
 from pg8000.converters import (
     PG_PY_ENCODINGS,
     PG_TYPES,
@@ -17,7 +16,6 @@ from pg8000.converters import (
     string_in,
 )
 from pg8000.exceptions import DatabaseError, InterfaceError
-
 
 ver = version("pg8000")
 
@@ -34,7 +32,6 @@ ihihih_pack, ihihih_unpack = pack_funcs("ihihih")
 ci_pack, ci_unpack = pack_funcs("ci")
 bh_pack, bh_unpack = pack_funcs("bh")
 cccc_pack, cccc_unpack = pack_funcs("cccc")
-
 
 # Copyright (c) 2007-2009, Mathieu Fenniak
 # Copyright (c) The Contributors
@@ -66,9 +63,7 @@ cccc_pack, cccc_unpack = pack_funcs("cccc")
 
 __author__ = "Mathieu Fenniak"
 
-
 NULL_BYTE = b"\x00"
-
 
 # Message codes
 NOTICE_RESPONSE = b"N"
@@ -170,14 +165,14 @@ def _write(sock, d):
 
 
 def _make_socket(
-    unix_sock,
-    orig_sock,
-    host,
-    port,
-    timeout,
-    source_address,
-    tcp_keepalive,
-    orig_ssl_context,
+        unix_sock,
+        orig_sock,
+        host,
+        port,
+        timeout,
+        source_address,
+        tcp_keepalive,
+        orig_ssl_context,
 ):
     if unix_sock is not None:
         if orig_sock is not None:
@@ -258,20 +253,20 @@ class CoreConnection:
         self.close()
 
     def __init__(
-        self,
-        user,
-        host="localhost",
-        database=None,
-        port=5432,
-        password=None,
-        source_address=None,
-        unix_sock=None,
-        ssl_context=None,
-        timeout=None,
-        tcp_keepalive=True,
-        application_name=None,
-        replication=None,
-        sock=None,
+            self,
+            user,
+            host="localhost",
+            database=None,
+            port=5432,
+            password=None,
+            source_address=None,
+            unix_sock=None,
+            ssl_context=None,
+            timeout=None,
+            tcp_keepalive=True,
+            application_name=None,
+            replication=None,
+            sock=None,
     ):
         self._client_encoding = "utf8"
         self._commands_with_count = (
@@ -530,7 +525,7 @@ class CoreConnection:
         idx = 4
         null_idx = data.find(NULL_BYTE, idx)
         channel = data[idx:null_idx].decode("ascii")
-        payload = data[null_idx + 1 : -1].decode("ascii")
+        payload = data[null_idx + 1: -1].decode("ascii")
 
         self.notifications.append((backend_pid, channel, payload))
 
@@ -636,7 +631,7 @@ class CoreConnection:
         columns = []
         input_funcs = []
         for i in range(count):
-            name = data[idx : data.find(NULL_BYTE, idx)]
+            name = data[idx: data.find(NULL_BYTE, idx)]
             idx += len(name) + 1
             field = dict(
                 zip(
@@ -742,7 +737,7 @@ class CoreConnection:
         return statement_name_bin, context.columns, context.input_funcs
 
     def execute_named(
-        self, statement_name_bin, params, columns, input_funcs, statement
+            self, statement_name_bin, params, columns, input_funcs, statement
     ):
         context = Context(columns=columns, input_funcs=input_funcs, statement=statement)
 
@@ -818,7 +813,7 @@ class CoreConnection:
             if vlen == -1:
                 v = None
             else:
-                v = func(str(data[idx : idx + vlen], encoding=self._client_encoding))
+                v = func(str(data[idx: idx + vlen], encoding=self._client_encoding))
                 idx += vlen
             row.append(v)
         context.rows.append(row)
@@ -850,7 +845,7 @@ class CoreConnection:
 
     def handle_PARAMETER_STATUS(self, data, context):
         pos = data.find(NULL_BYTE)
-        key, value = data[:pos].decode("ascii"), data[pos + 1 : -1].decode(
+        key, value = data[:pos].decode("ascii"), data[pos + 1: -1].decode(
             self._client_encoding
         )
         self.parameter_statuses[key] = value

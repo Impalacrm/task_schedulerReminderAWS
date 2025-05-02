@@ -195,12 +195,10 @@ class _ECPoint():
 
 
 class ECPoint(OctetString, _ECPoint):
-
     pass
 
 
 class ECPointBitString(OctetBitString, _ECPoint):
-
     pass
 
 

@@ -34,9 +34,9 @@ try:  # Compiled with SSL?
 except (ImportError, AttributeError):
     ssl = None  # type: ignore[assignment]
 
+
     class BaseSSLError(BaseException):  # type: ignore[no-redef]
         pass
-
 
 from ._base_connection import _TYPE_BODY
 from ._base_connection import ProxyConfig as ProxyConfig
@@ -66,7 +66,6 @@ from .util.url import Url
 # Not a no-op, we're adding this to the namespace so it can be imported.
 ConnectionError = ConnectionError
 BrokenPipeError = BrokenPipeError
-
 
 log = logging.getLogger(__name__)
 
@@ -130,18 +129,18 @@ class HTTPConnection(_HTTPConnection):
     _tunnel_scheme: str | None
 
     def __init__(
-        self,
-        host: str,
-        port: int | None = None,
-        *,
-        timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
-        source_address: tuple[str, int] | None = None,
-        blocksize: int = 16384,
-        socket_options: None | (
-            connection._TYPE_SOCKET_OPTIONS
-        ) = default_socket_options,
-        proxy: Url | None = None,
-        proxy_config: ProxyConfig | None = None,
+            self,
+            host: str,
+            port: int | None = None,
+            *,
+            timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
+            source_address: tuple[str, int] | None = None,
+            blocksize: int = 16384,
+            socket_options: None | (
+                    connection._TYPE_SOCKET_OPTIONS
+            ) = default_socket_options,
+            proxy: Url | None = None,
+            proxy_config: ProxyConfig | None = None,
     ) -> None:
         super().__init__(
             host=host,
@@ -219,11 +218,11 @@ class HTTPConnection(_HTTPConnection):
         return sock
 
     def set_tunnel(
-        self,
-        host: str,
-        port: int | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        scheme: str = "http",
+            self,
+            host: str,
+            port: int | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            scheme: str = "http",
     ) -> None:
         if scheme not in ("http", "https"):
             raise ValueError(
@@ -333,11 +332,11 @@ class HTTPConnection(_HTTPConnection):
             self._tunnel_scheme = None
 
     def putrequest(
-        self,
-        method: str,
-        url: str,
-        skip_host: bool = False,
-        skip_accept_encoding: bool = False,
+            self,
+            method: str,
+            url: str,
+            skip_host: bool = False,
+            skip_accept_encoding: bool = False,
     ) -> None:
         """"""
         # Empty docstring because the indentation of CPython's implementation
@@ -367,16 +366,16 @@ class HTTPConnection(_HTTPConnection):
     # `request` method's signature intentionally violates LSP.
     # urllib3's API is different from `http.client.HTTPConnection` and the subclassing is only incidental.
     def request(  # type: ignore[override]
-        self,
-        method: str,
-        url: str,
-        body: _TYPE_BODY | None = None,
-        headers: typing.Mapping[str, str] | None = None,
-        *,
-        chunked: bool = False,
-        preload_content: bool = True,
-        decode_content: bool = True,
-        enforce_content_length: bool = True,
+            self,
+            method: str,
+            url: str,
+            body: _TYPE_BODY | None = None,
+            headers: typing.Mapping[str, str] | None = None,
+            *,
+            chunked: bool = False,
+            preload_content: bool = True,
+            decode_content: bool = True,
+            enforce_content_length: bool = True,
     ) -> None:
         # Update the inner socket's timeout value to send the request.
         # This only triggers if the connection is re-used.
@@ -464,11 +463,11 @@ class HTTPConnection(_HTTPConnection):
             self.send(b"0\r\n\r\n")
 
     def request_chunked(
-        self,
-        method: str,
-        url: str,
-        body: _TYPE_BODY | None = None,
-        headers: typing.Mapping[str, str] | None = None,
+            self,
+            method: str,
+            url: str,
+            body: _TYPE_BODY | None = None,
+            headers: typing.Mapping[str, str] | None = None,
     ) -> None:
         """
         Alternative to the common request method, which sends the
@@ -483,7 +482,7 @@ class HTTPConnection(_HTTPConnection):
         self.request(method, url, body=body, headers=headers, chunked=True)
 
     def getresponse(  # type: ignore[override]
-        self,
+            self,
     ) -> HTTPResponse:
         """
         Get the response from the server.
@@ -564,32 +563,32 @@ class HTTPSConnection(HTTPConnection):
     _connect_callback: typing.Callable[..., None] | None = None
 
     def __init__(
-        self,
-        host: str,
-        port: int | None = None,
-        *,
-        timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
-        source_address: tuple[str, int] | None = None,
-        blocksize: int = 16384,
-        socket_options: None | (
-            connection._TYPE_SOCKET_OPTIONS
-        ) = HTTPConnection.default_socket_options,
-        proxy: Url | None = None,
-        proxy_config: ProxyConfig | None = None,
-        cert_reqs: int | str | None = None,
-        assert_hostname: None | str | typing.Literal[False] = None,
-        assert_fingerprint: str | None = None,
-        server_hostname: str | None = None,
-        ssl_context: ssl.SSLContext | None = None,
-        ca_certs: str | None = None,
-        ca_cert_dir: str | None = None,
-        ca_cert_data: None | str | bytes = None,
-        ssl_minimum_version: int | None = None,
-        ssl_maximum_version: int | None = None,
-        ssl_version: int | str | None = None,  # Deprecated
-        cert_file: str | None = None,
-        key_file: str | None = None,
-        key_password: str | None = None,
+            self,
+            host: str,
+            port: int | None = None,
+            *,
+            timeout: _TYPE_TIMEOUT = _DEFAULT_TIMEOUT,
+            source_address: tuple[str, int] | None = None,
+            blocksize: int = 16384,
+            socket_options: None | (
+                    connection._TYPE_SOCKET_OPTIONS
+            ) = HTTPConnection.default_socket_options,
+            proxy: Url | None = None,
+            proxy_config: ProxyConfig | None = None,
+            cert_reqs: int | str | None = None,
+            assert_hostname: None | str | typing.Literal[False] = None,
+            assert_fingerprint: str | None = None,
+            server_hostname: str | None = None,
+            ssl_context: ssl.SSLContext | None = None,
+            ca_certs: str | None = None,
+            ca_cert_dir: str | None = None,
+            ca_cert_data: None | str | bytes = None,
+            ssl_minimum_version: int | None = None,
+            ssl_maximum_version: int | None = None,
+            ssl_version: int | str | None = None,  # Deprecated
+            cert_file: str | None = None,
+            key_file: str | None = None,
+            key_password: str | None = None,
     ) -> None:
         super().__init__(
             host,
@@ -626,16 +625,16 @@ class HTTPSConnection(HTTPConnection):
         self._connect_callback = None
 
     def set_cert(
-        self,
-        key_file: str | None = None,
-        cert_file: str | None = None,
-        cert_reqs: int | str | None = None,
-        key_password: str | None = None,
-        ca_certs: str | None = None,
-        assert_hostname: None | str | typing.Literal[False] = None,
-        assert_fingerprint: str | None = None,
-        ca_cert_dir: str | None = None,
-        ca_cert_data: None | str | bytes = None,
+            self,
+            key_file: str | None = None,
+            cert_file: str | None = None,
+            cert_reqs: int | str | None = None,
+            key_password: str | None = None,
+            ca_certs: str | None = None,
+            assert_hostname: None | str | typing.Literal[False] = None,
+            assert_fingerprint: str | None = None,
+            ca_cert_dir: str | None = None,
+            ca_cert_data: None | str | bytes = None,
     ) -> None:
         """
         This method should only be called once, before the connection is used.
@@ -844,23 +843,23 @@ class _WrappedAndVerifiedSocket(typing.NamedTuple):
 
 
 def _ssl_wrap_socket_and_match_hostname(
-    sock: socket.socket,
-    *,
-    cert_reqs: None | str | int,
-    ssl_version: None | str | int,
-    ssl_minimum_version: int | None,
-    ssl_maximum_version: int | None,
-    cert_file: str | None,
-    key_file: str | None,
-    key_password: str | None,
-    ca_certs: str | None,
-    ca_cert_dir: str | None,
-    ca_cert_data: None | str | bytes,
-    assert_hostname: None | str | typing.Literal[False],
-    assert_fingerprint: str | None,
-    server_hostname: str | None,
-    ssl_context: ssl.SSLContext | None,
-    tls_in_tls: bool = False,
+        sock: socket.socket,
+        *,
+        cert_reqs: None | str | int,
+        ssl_version: None | str | int,
+        ssl_minimum_version: int | None,
+        ssl_maximum_version: int | None,
+        cert_file: str | None,
+        key_file: str | None,
+        key_password: str | None,
+        ca_certs: str | None,
+        ca_cert_dir: str | None,
+        ca_cert_data: None | str | bytes,
+        assert_hostname: None | str | typing.Literal[False],
+        assert_fingerprint: str | None,
+        server_hostname: str | None,
+        ssl_context: ssl.SSLContext | None,
+        tls_in_tls: bool = False,
 ) -> _WrappedAndVerifiedSocket:
     """Logic for constructing an SSLContext from all TLS parameters, passing
     that down into ssl_wrap_socket, and then doing certificate verification
@@ -883,15 +882,15 @@ def _ssl_wrap_socket_and_match_hostname(
 
     # In some cases, we want to verify hostnames ourselves
     if (
-        # `ssl` can't verify fingerprints or alternate hostnames
-        assert_fingerprint
-        or assert_hostname
-        # assert_hostname can be set to False to disable hostname checking
-        or assert_hostname is False
-        # We still support OpenSSL 1.0.2, which prevents us from verifying
-        # hostnames easily: https://github.com/pyca/pyopenssl/pull/933
-        or ssl_.IS_PYOPENSSL
-        or not ssl_.HAS_NEVER_CHECK_COMMON_NAME
+            # `ssl` can't verify fingerprints or alternate hostnames
+            assert_fingerprint
+            or assert_hostname
+            # assert_hostname can be set to False to disable hostname checking
+            or assert_hostname is False
+            # We still support OpenSSL 1.0.2, which prevents us from verifying
+            # hostnames easily: https://github.com/pyca/pyopenssl/pull/933
+            or ssl_.IS_PYOPENSSL
+            or not ssl_.HAS_NEVER_CHECK_COMMON_NAME
     ):
         context.check_hostname = False
 
@@ -899,11 +898,11 @@ def _ssl_wrap_socket_and_match_hostname(
     # for custom pyOpenSSL SSLContext objects because they don't support
     # load_default_certs().
     if (
-        not ca_certs
-        and not ca_cert_dir
-        and not ca_cert_data
-        and default_ssl_context
-        and hasattr(context, "load_default_certs")
+            not ca_certs
+            and not ca_cert_dir
+            and not ca_cert_data
+            and default_ssl_context
+            and hasattr(context, "load_default_certs")
     ):
         context.load_default_certs()
 
@@ -936,9 +935,9 @@ def _ssl_wrap_socket_and_match_hostname(
                 ssl_sock.getpeercert(binary_form=True), assert_fingerprint
             )
         elif (
-            context.verify_mode != ssl.CERT_NONE
-            and not context.check_hostname
-            and assert_hostname is not False
+                context.verify_mode != ssl.CERT_NONE
+                and not context.check_hostname
+                and assert_hostname is not False
         ):
             cert: _TYPE_PEER_CERT_RET_DICT = ssl_sock.getpeercert()  # type: ignore[assignment]
 
@@ -949,7 +948,7 @@ def _ssl_wrap_socket_and_match_hostname(
                 hostname_checks_common_name = False
             else:
                 hostname_checks_common_name = (
-                    getattr(context, "hostname_checks_common_name", False) or False
+                        getattr(context, "hostname_checks_common_name", False) or False
                 )
 
             _match_hostname(
@@ -961,7 +960,7 @@ def _ssl_wrap_socket_and_match_hostname(
         return _WrappedAndVerifiedSocket(
             socket=ssl_sock,
             is_verified=context.verify_mode == ssl.CERT_REQUIRED
-            or bool(assert_fingerprint),
+                        or bool(assert_fingerprint),
         )
     except BaseException:
         ssl_sock.close()
@@ -969,9 +968,9 @@ def _ssl_wrap_socket_and_match_hostname(
 
 
 def _match_hostname(
-    cert: _TYPE_PEER_CERT_RET_DICT | None,
-    asserted_hostname: str,
-    hostname_checks_common_name: bool = False,
+        cert: _TYPE_PEER_CERT_RET_DICT | None,
+        asserted_hostname: str,
+        hostname_checks_common_name: bool = False,
 ) -> None:
     # Our upstream implementation of ssl.match_hostname()
     # only applies this normalization to IP addresses so it doesn't
@@ -1000,9 +999,9 @@ def _wrap_proxy_error(err: Exception, proxy_scheme: str | None) -> ProxyError:
     # this proxy is HTTP-only and they have a configuration issue.
     error_normalized = " ".join(re.split("[^a-z]", str(err).lower()))
     is_likely_http_proxy = (
-        "wrong version number" in error_normalized
-        or "unknown protocol" in error_normalized
-        or "record layer failure" in error_normalized
+            "wrong version number" in error_normalized
+            or "unknown protocol" in error_normalized
+            or "record layer failure" in error_normalized
     )
     http_proxy_warning = (
         ". Your proxy appears to only use HTTP and not HTTPS, "
@@ -1030,12 +1029,11 @@ class DummyConnection:
 if not ssl:
     HTTPSConnection = DummyConnection  # type: ignore[misc, assignment] # noqa: F811
 
-
 VerifiedHTTPSConnection = HTTPSConnection
 
 
 def _url_from_connection(
-    conn: HTTPConnection | HTTPSConnection, path: str | None = None
+        conn: HTTPConnection | HTTPSConnection, path: str | None = None
 ) -> str:
     """Returns the URL from a given connection. This is mainly used for testing and logging."""
 

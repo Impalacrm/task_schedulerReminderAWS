@@ -31,7 +31,6 @@ if typing.TYPE_CHECKING:
 
 __all__ = ["PoolManager", "ProxyManager", "proxy_from_url"]
 
-
 log = logging.getLogger(__name__)
 
 SSL_KEYWORDS = (
@@ -93,7 +92,7 @@ class PoolKey(typing.NamedTuple):
 
 
 def _default_key_normalizer(
-    key_class: type[PoolKey], request_context: dict[str, typing.Any]
+        key_class: type[PoolKey], request_context: dict[str, typing.Any]
 ) -> PoolKey:
     """
     Create a pool key out of a request context dictionary.
@@ -197,10 +196,10 @@ class PoolManager(RequestMethods):
     proxy_config: ProxyConfig | None = None
 
     def __init__(
-        self,
-        num_pools: int = 10,
-        headers: typing.Mapping[str, str] | None = None,
-        **connection_pool_kw: typing.Any,
+            self,
+            num_pools: int = 10,
+            headers: typing.Mapping[str, str] | None = None,
+            **connection_pool_kw: typing.Any,
     ) -> None:
         super().__init__(headers)
         self.connection_pool_kw = connection_pool_kw
@@ -217,21 +216,21 @@ class PoolManager(RequestMethods):
         return self
 
     def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
+            self,
+            exc_type: type[BaseException] | None,
+            exc_val: BaseException | None,
+            exc_tb: TracebackType | None,
     ) -> typing.Literal[False]:
         self.clear()
         # Return False to re-raise any potential exceptions
         return False
 
     def _new_pool(
-        self,
-        scheme: str,
-        host: str,
-        port: int,
-        request_context: dict[str, typing.Any] | None = None,
+            self,
+            scheme: str,
+            host: str,
+            port: int,
+            request_context: dict[str, typing.Any] | None = None,
     ) -> HTTPConnectionPool:
         """
         Create a new :class:`urllib3.connectionpool.ConnectionPool` based on host, port, scheme, and
@@ -274,11 +273,11 @@ class PoolManager(RequestMethods):
         self.pools.clear()
 
     def connection_from_host(
-        self,
-        host: str | None,
-        port: int | None = None,
-        scheme: str | None = "http",
-        pool_kwargs: dict[str, typing.Any] | None = None,
+            self,
+            host: str | None,
+            port: int | None = None,
+            scheme: str | None = "http",
+            pool_kwargs: dict[str, typing.Any] | None = None,
     ) -> HTTPConnectionPool:
         """
         Get a :class:`urllib3.connectionpool.ConnectionPool` based on the host, port, and scheme.
@@ -303,7 +302,7 @@ class PoolManager(RequestMethods):
         return self.connection_from_context(request_context)
 
     def connection_from_context(
-        self, request_context: dict[str, typing.Any]
+            self, request_context: dict[str, typing.Any]
     ) -> HTTPConnectionPool:
         """
         Get a :class:`urllib3.connectionpool.ConnectionPool` based on the request context.
@@ -328,7 +327,7 @@ class PoolManager(RequestMethods):
         return self.connection_from_pool_key(pool_key, request_context=request_context)
 
     def connection_from_pool_key(
-        self, pool_key: PoolKey, request_context: dict[str, typing.Any]
+            self, pool_key: PoolKey, request_context: dict[str, typing.Any]
     ) -> HTTPConnectionPool:
         """
         Get a :class:`urllib3.connectionpool.ConnectionPool` based on the provided pool key.
@@ -354,7 +353,7 @@ class PoolManager(RequestMethods):
         return pool
 
     def connection_from_url(
-        self, url: str, pool_kwargs: dict[str, typing.Any] | None = None
+            self, url: str, pool_kwargs: dict[str, typing.Any] | None = None
     ) -> HTTPConnectionPool:
         """
         Similar to :func:`urllib3.connectionpool.connection_from_url`.
@@ -372,7 +371,7 @@ class PoolManager(RequestMethods):
         )
 
     def _merge_pool_kwargs(
-        self, override: dict[str, typing.Any] | None
+            self, override: dict[str, typing.Any] | None
     ) -> dict[str, typing.Any]:
         """
         Merge a dictionary of override values for self.connection_pool_kw.
@@ -407,7 +406,7 @@ class PoolManager(RequestMethods):
         )
 
     def urlopen(  # type: ignore[override]
-        self, method: str, url: str, redirect: bool = True, **kw: typing.Any
+            self, method: str, url: str, redirect: bool = True, **kw: typing.Any
     ) -> BaseHTTPResponse:
         """
         Same as :meth:`urllib3.HTTPConnectionPool.urlopen`
@@ -464,7 +463,7 @@ class PoolManager(RequestMethods):
         # Check remove_headers_on_redirect to avoid a potential network call within
         # conn.is_same_host() which may use socket.gethostbyname() in the future.
         if retries.remove_headers_on_redirect and not conn.is_same_host(
-            redirect_location
+                redirect_location
         ):
             new_headers = kw["headers"].copy()
             for header in kw["headers"]:
@@ -545,16 +544,16 @@ class ProxyManager(PoolManager):
     """
 
     def __init__(
-        self,
-        proxy_url: str,
-        num_pools: int = 10,
-        headers: typing.Mapping[str, str] | None = None,
-        proxy_headers: typing.Mapping[str, str] | None = None,
-        proxy_ssl_context: ssl.SSLContext | None = None,
-        use_forwarding_for_https: bool = False,
-        proxy_assert_hostname: None | str | typing.Literal[False] = None,
-        proxy_assert_fingerprint: str | None = None,
-        **connection_pool_kw: typing.Any,
+            self,
+            proxy_url: str,
+            num_pools: int = 10,
+            headers: typing.Mapping[str, str] | None = None,
+            proxy_headers: typing.Mapping[str, str] | None = None,
+            proxy_ssl_context: ssl.SSLContext | None = None,
+            use_forwarding_for_https: bool = False,
+            proxy_assert_hostname: None | str | typing.Literal[False] = None,
+            proxy_assert_fingerprint: str | None = None,
+            **connection_pool_kw: typing.Any,
     ) -> None:
         if isinstance(proxy_url, HTTPConnectionPool):
             str_proxy_url = f"{proxy_url.scheme}://{proxy_url.host}:{proxy_url.port}"
@@ -586,11 +585,11 @@ class ProxyManager(PoolManager):
         super().__init__(num_pools, headers, **connection_pool_kw)
 
     def connection_from_host(
-        self,
-        host: str | None,
-        port: int | None = None,
-        scheme: str | None = "http",
-        pool_kwargs: dict[str, typing.Any] | None = None,
+            self,
+            host: str | None,
+            port: int | None = None,
+            scheme: str | None = "http",
+            pool_kwargs: dict[str, typing.Any] | None = None,
     ) -> HTTPConnectionPool:
         if scheme == "https":
             return super().connection_from_host(
@@ -602,7 +601,7 @@ class ProxyManager(PoolManager):
         )
 
     def _set_proxy_headers(
-        self, url: str, headers: typing.Mapping[str, str] | None = None
+            self, url: str, headers: typing.Mapping[str, str] | None = None
     ) -> typing.Mapping[str, str]:
         """
         Sets headers needed by proxies: specifically, the Accept and Host
@@ -619,7 +618,7 @@ class ProxyManager(PoolManager):
         return headers_
 
     def urlopen(  # type: ignore[override]
-        self, method: str, url: str, redirect: bool = True, **kw: typing.Any
+            self, method: str, url: str, redirect: bool = True, **kw: typing.Any
     ) -> BaseHTTPResponse:
         "Same as HTTP(S)ConnectionPool.urlopen, ``url`` must be absolute."
         u = parse_url(url)

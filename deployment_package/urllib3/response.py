@@ -162,7 +162,6 @@ if brotli is not None:
                 return self._obj.flush()  # type: ignore[no-any-return]
             return b""
 
-
 if HAS_ZSTD:
 
     class ZstdDecoder(ContentDecoder):
@@ -314,16 +313,16 @@ class BaseHTTPResponse(io.IOBase):
         DECODER_ERROR_CLASSES += (zstd.ZstdError,)
 
     def __init__(
-        self,
-        *,
-        headers: typing.Mapping[str, str] | typing.Mapping[bytes, bytes] | None = None,
-        status: int,
-        version: int,
-        version_string: str,
-        reason: str | None,
-        decode_content: bool,
-        request_url: str | None,
-        retries: Retry | None = None,
+            self,
+            *,
+            headers: typing.Mapping[str, str] | typing.Mapping[bytes, bytes] | None = None,
+            status: int,
+            version: int,
+            version_string: str,
+            reason: str | None,
+            decode_content: bool,
+            request_url: str | None,
+            retries: Retry | None = None,
     ) -> None:
         if isinstance(headers, HTTPHeaderDict):
             self.headers = headers
@@ -409,29 +408,29 @@ class BaseHTTPResponse(io.IOBase):
         self._retries = retries
 
     def stream(
-        self, amt: int | None = 2**16, decode_content: bool | None = None
+            self, amt: int | None = 2 ** 16, decode_content: bool | None = None
     ) -> typing.Iterator[bytes]:
         raise NotImplementedError()
 
     def read(
-        self,
-        amt: int | None = None,
-        decode_content: bool | None = None,
-        cache_content: bool = False,
+            self,
+            amt: int | None = None,
+            decode_content: bool | None = None,
+            cache_content: bool = False,
     ) -> bytes:
         raise NotImplementedError()
 
     def read1(
-        self,
-        amt: int | None = None,
-        decode_content: bool | None = None,
+            self,
+            amt: int | None = None,
+            decode_content: bool | None = None,
     ) -> bytes:
         raise NotImplementedError()
 
     def read_chunked(
-        self,
-        amt: int | None = None,
-        decode_content: bool | None = None,
+            self,
+            amt: int | None = None,
+            decode_content: bool | None = None,
     ) -> typing.Iterator[bytes]:
         raise NotImplementedError()
 
@@ -467,7 +466,7 @@ class BaseHTTPResponse(io.IOBase):
                     self._decoder = _get_decoder(content_encoding)
 
     def _decode(
-        self, data: bytes, decode_content: bool | None, flush_decoder: bool
+            self, data: bytes, decode_content: bool | None, flush_decoder: bool
     ) -> bytes:
         """
         Decode the data passed in and potentially flush the decoder.
@@ -575,25 +574,25 @@ class HTTPResponse(BaseHTTPResponse):
     """
 
     def __init__(
-        self,
-        body: _TYPE_BODY = "",
-        headers: typing.Mapping[str, str] | typing.Mapping[bytes, bytes] | None = None,
-        status: int = 0,
-        version: int = 0,
-        version_string: str = "HTTP/?",
-        reason: str | None = None,
-        preload_content: bool = True,
-        decode_content: bool = True,
-        original_response: _HttplibHTTPResponse | None = None,
-        pool: HTTPConnectionPool | None = None,
-        connection: HTTPConnection | None = None,
-        msg: _HttplibHTTPMessage | None = None,
-        retries: Retry | None = None,
-        enforce_content_length: bool = True,
-        request_method: str | None = None,
-        request_url: str | None = None,
-        auto_close: bool = True,
-        sock_shutdown: typing.Callable[[int], None] | None = None,
+            self,
+            body: _TYPE_BODY = "",
+            headers: typing.Mapping[str, str] | typing.Mapping[bytes, bytes] | None = None,
+            status: int = 0,
+            version: int = 0,
+            version_string: str = "HTTP/?",
+            reason: str | None = None,
+            preload_content: bool = True,
+            decode_content: bool = True,
+            original_response: _HttplibHTTPResponse | None = None,
+            pool: HTTPConnectionPool | None = None,
+            connection: HTTPConnection | None = None,
+            msg: _HttplibHTTPMessage | None = None,
+            retries: Retry | None = None,
+            enforce_content_length: bool = True,
+            request_method: str | None = None,
+            request_url: str | None = None,
+            auto_close: bool = True,
+            sock_shutdown: typing.Callable[[int], None] | None = None,
     ) -> None:
         super().__init__(
             headers=headers,
@@ -768,9 +767,9 @@ class HTTPResponse(BaseHTTPResponse):
 
             except IncompleteRead as e:
                 if (
-                    e.expected is not None
-                    and e.partial is not None
-                    and e.expected == -e.partial
+                        e.expected is not None
+                        and e.partial is not None
+                        and e.expected == -e.partial
                 ):
                     arg = "Response may not contain content."
                 else:
@@ -805,10 +804,10 @@ class HTTPResponse(BaseHTTPResponse):
                 self.release_conn()
 
     def _fp_read(
-        self,
-        amt: int | None = None,
-        *,
-        read1: bool = False,
+            self,
+            amt: int | None = None,
+            *,
+            read1: bool = False,
     ) -> bytes:
         """
         Read a response with the thought that reading the number of bytes
@@ -824,14 +823,14 @@ class HTTPResponse(BaseHTTPResponse):
           * CPython < 3.10 only when `amt` does not fit 32-bit int.
         """
         assert self._fp
-        c_int_max = 2**31 - 1
+        c_int_max = 2 ** 31 - 1
         if (
-            (amt and amt > c_int_max)
-            or (
-                amt is None
-                and self.length_remaining
-                and self.length_remaining > c_int_max
-            )
+                (amt and amt > c_int_max)
+                or (
+                        amt is None
+                        and self.length_remaining
+                        and self.length_remaining > c_int_max
+                )
         ) and (util.IS_PYOPENSSL or sys.version_info < (3, 10)):
             if read1:
                 return self._fp.read1(c_int_max)
@@ -842,7 +841,7 @@ class HTTPResponse(BaseHTTPResponse):
             # `c_int_max` equal to 2 GiB - 1 byte is the actual maximum
             # chunk size that does not lead to an overflow error, but
             # 256 MiB is a compromise.
-            max_chunk_amt = 2**28
+            max_chunk_amt = 2 ** 28
             while amt is None or amt != 0:
                 if amt is not None:
                     chunk_amt = min(amt, max_chunk_amt)
@@ -862,10 +861,10 @@ class HTTPResponse(BaseHTTPResponse):
             return self._fp.read(amt) if amt is not None else self._fp.read()
 
     def _raw_read(
-        self,
-        amt: int | None = None,
-        *,
-        read1: bool = False,
+            self,
+            amt: int | None = None,
+            *,
+            read1: bool = False,
     ) -> bytes:
         """
         Reads `amt` of bytes from the socket.
@@ -888,9 +887,9 @@ class HTTPResponse(BaseHTTPResponse):
                 # no harm in redundantly calling close.
                 self._fp.close()
                 if (
-                    self.enforce_content_length
-                    and self.length_remaining is not None
-                    and self.length_remaining != 0
+                        self.enforce_content_length
+                        and self.length_remaining is not None
+                        and self.length_remaining != 0
                 ):
                     # This is an edge case that httplib failed to cover due
                     # to concerns of backward compatibility. We're
@@ -899,7 +898,7 @@ class HTTPResponse(BaseHTTPResponse):
                     # Content-Length are caught.
                     raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
             elif read1 and (
-                (amt != 0 and not data) or self.length_remaining == len(data)
+                    (amt != 0 and not data) or self.length_remaining == len(data)
             ):
                 # All data has been read, but `self._fp.read1` in
                 # CPython 3.12 and older doesn't always close
@@ -914,10 +913,10 @@ class HTTPResponse(BaseHTTPResponse):
         return data
 
     def read(
-        self,
-        amt: int | None = None,
-        decode_content: bool | None = None,
-        cache_content: bool = False,
+            self,
+            amt: int | None = None,
+            decode_content: bool | None = None,
+            cache_content: bool = False,
     ) -> bytes:
         """
         Similar to :meth:`http.client.HTTPResponse.read`, but with two additional
@@ -988,9 +987,9 @@ class HTTPResponse(BaseHTTPResponse):
         return data
 
     def read1(
-        self,
-        amt: int | None = None,
-        decode_content: bool | None = None,
+            self,
+            amt: int | None = None,
+            decode_content: bool | None = None,
     ) -> bytes:
         """
         Similar to ``http.client.HTTPResponse.read1`` and documented
@@ -1042,7 +1041,7 @@ class HTTPResponse(BaseHTTPResponse):
         return self._decoded_buffer.get(amt)
 
     def stream(
-        self, amt: int | None = 2**16, decode_content: bool | None = None
+            self, amt: int | None = 2 ** 16, decode_content: bool | None = None
     ) -> typing.Generator[bytes]:
         """
         A generator wrapper for the read() method. A call will block until
@@ -1115,9 +1114,9 @@ class HTTPResponse(BaseHTTPResponse):
 
     def flush(self) -> None:
         if (
-            self._fp is not None
-            and hasattr(self._fp, "flush")
-            and not getattr(self._fp, "closed", False)
+                self._fp is not None
+                and hasattr(self._fp, "flush")
+                and not getattr(self._fp, "closed", False)
         ):
             return self._fp.flush()
 
@@ -1171,7 +1170,7 @@ class HTTPResponse(BaseHTTPResponse):
         return returned_chunk  # type: ignore[no-any-return]
 
     def read_chunked(
-        self, amt: int | None = None, decode_content: bool | None = None
+            self, amt: int | None = None, decode_content: bool | None = None
     ) -> typing.Generator[bytes]:
         """
         Similar to :meth:`HTTPResponse.read`, but with an additional

@@ -5,7 +5,8 @@ Used for testing against as they are only correct for the years
 '''
 
 from datetime import tzinfo, timedelta, datetime
-from pytz import HOUR, ZERO, UTC
+
+from pytz import HOUR, ZERO
 
 __all__ = [
     'FixedOffset',
@@ -76,6 +77,7 @@ class LocalTimezone(tzinfo):
         tt = _time.localtime(stamp)
         return tt.tm_isdst > 0
 
+
 Local = LocalTimezone()
 
 
@@ -133,6 +135,7 @@ class USTimeZone(tzinfo):
             return HOUR
         else:
             return ZERO
+
 
 Eastern = USTimeZone(-5, "Eastern", "EST", "EDT")
 Central = USTimeZone(-6, "Central", "CST", "CDT")

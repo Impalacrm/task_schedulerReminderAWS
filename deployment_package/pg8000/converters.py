@@ -19,10 +19,8 @@ from json import dumps, loads
 from uuid import UUID
 
 from dateutil.parser import ParserError, parse
-
 from pg8000.exceptions import InterfaceError
 from pg8000.types import PGInterval, Range
-
 
 ANY_ARRAY = 2277
 BIGINT = 20
@@ -109,10 +107,9 @@ VARCHAR = 1043
 VARCHAR_ARRAY = 1015
 XID = 28
 
-
-MIN_INT2, MAX_INT2 = -(2**15), 2**15
-MIN_INT4, MAX_INT4 = -(2**31), 2**31
-MIN_INT8, MAX_INT8 = -(2**63), 2**63
+MIN_INT2, MAX_INT2 = -(2 ** 15), 2 ** 15
+MIN_INT4, MAX_INT4 = -(2 ** 31), 2 ** 31
+MIN_INT8, MAX_INT8 = -(2 ** 63), 2 ** 63
 
 
 def bool_in(data):
@@ -459,10 +456,10 @@ def array_string_escape(v):
         cs.append(c)
     val = "".join(cs)
     if (
-        len(val) == 0
-        or val == "NULL"
-        or any(c.isspace() for c in val)
-        or any(c in val for c in ("{", "}", ",", "\\"))
+            len(val) == 0
+            or val == "NULL"
+            or any(c.isspace() for c in val)
+            or any(c in val for c in ("{", "}", ",", "\\"))
     ):
         val = f'"{val}"'
     return val
@@ -586,7 +583,6 @@ PY_PG = {
     str: TEXT,
 }
 
-
 PY_TYPES = {
     Date: date_out,  # date
     Datetime: datetime_out,
@@ -612,7 +608,6 @@ PY_TYPES = {
     list: array_out,
     tuple: composite_out,
 }
-
 
 PG_TYPES = {
     BIGINT: int,  # int8
@@ -695,7 +690,6 @@ PG_TYPES = {
     VARCHAR_ARRAY: string_array_in,  # varchar[]
     XID: int,  # xid
 }
-
 
 # PostgreSQL encodings:
 # https://www.postgresql.org/docs/current/multibyte.html

@@ -79,15 +79,15 @@ class TooManySymbolOrPunctuationPlugin(MessDetectorPlugin):
         self._character_count += 1
 
         if (
-            character != self._last_printable_char
-            and character not in COMMON_SAFE_ASCII_CHARACTERS
+                character != self._last_printable_char
+                and character not in COMMON_SAFE_ASCII_CHARACTERS
         ):
             if is_punctuation(character):
                 self._punctuation_count += 1
             elif (
-                character.isdigit() is False
-                and is_symbol(character)
-                and is_emoticon(character) is False
+                    character.isdigit() is False
+                    and is_symbol(character)
+                    and is_emoticon(character) is False
             ):
                 self._symbol_count += 2
 
@@ -104,8 +104,8 @@ class TooManySymbolOrPunctuationPlugin(MessDetectorPlugin):
             return 0.0
 
         ratio_of_punctuation: float = (
-            self._punctuation_count + self._symbol_count
-        ) / self._character_count
+                                              self._punctuation_count + self._symbol_count
+                                      ) / self._character_count
 
         return ratio_of_punctuation if ratio_of_punctuation >= 0.3 else 0.0
 
@@ -174,9 +174,9 @@ class SuspiciousDuplicateAccentPlugin(MessDetectorPlugin):
     def feed(self, character: str) -> None:
         self._character_count += 1
         if (
-            self._last_latin_character is not None
-            and is_accentuated(character)
-            and is_accentuated(self._last_latin_character)
+                self._last_latin_character is not None
+                and is_accentuated(character)
+                and is_accentuated(self._last_latin_character)
         ):
             if character.isupper() and self._last_latin_character.isupper():
                 self._successive_count += 1
@@ -211,9 +211,9 @@ class SuspiciousRange(MessDetectorPlugin):
         self._character_count += 1
 
         if (
-            character.isspace()
-            or is_punctuation(character)
-            or character in COMMON_SAFE_ASCII_CHARACTERS
+                character.isspace()
+                or is_punctuation(character)
+                or character in COMMON_SAFE_ASCII_CHARACTERS
         ):
             self._last_printable_seen = None
             return
@@ -241,8 +241,8 @@ class SuspiciousRange(MessDetectorPlugin):
             return 0.0
 
         ratio_of_suspicious_range_usage: float = (
-            self._suspicious_successive_range_count * 2
-        ) / self._character_count
+                                                         self._suspicious_successive_range_count * 2
+                                                 ) / self._character_count
 
         return ratio_of_suspicious_range_usage
 
@@ -272,28 +272,28 @@ class SuperWeirdWordPlugin(MessDetectorPlugin):
             if is_accentuated(character):
                 self._buffer_accent_count += 1
             if (
-                self._foreign_long_watch is False
-                and (is_latin(character) is False or is_accentuated(character))
-                and is_cjk(character) is False
-                and is_hangul(character) is False
-                and is_katakana(character) is False
-                and is_hiragana(character) is False
-                and is_thai(character) is False
+                    self._foreign_long_watch is False
+                    and (is_latin(character) is False or is_accentuated(character))
+                    and is_cjk(character) is False
+                    and is_hangul(character) is False
+                    and is_katakana(character) is False
+                    and is_hiragana(character) is False
+                    and is_thai(character) is False
             ):
                 self._foreign_long_watch = True
             if (
-                is_cjk(character)
-                or is_hangul(character)
-                or is_katakana(character)
-                or is_hiragana(character)
-                or is_thai(character)
+                    is_cjk(character)
+                    or is_hangul(character)
+                    or is_katakana(character)
+                    or is_hiragana(character)
+                    or is_thai(character)
             ):
                 self._buffer_glyph_count += 1
             return
         if not self._buffer:
             return
         if (
-            character.isspace() or is_punctuation(character) or is_separator(character)
+                character.isspace() or is_punctuation(character) or is_separator(character)
         ) and self._buffer:
             self._word_count += 1
             buffer_length: int = len(self._buffer)
@@ -306,9 +306,9 @@ class SuperWeirdWordPlugin(MessDetectorPlugin):
                 # Word/Buffer ending with an upper case accentuated letter are so rare,
                 # that we will consider them all as suspicious. Same weight as foreign_long suspicious.
                 elif (
-                    is_accentuated(self._buffer[-1])
-                    and self._buffer[-1].isupper()
-                    and all(_.isupper() for _ in self._buffer) is False
+                        is_accentuated(self._buffer[-1])
+                        and self._buffer[-1].isupper()
+                        and all(_.isupper() for _ in self._buffer) is False
                 ):
                     self._foreign_long_count += 1
                     self._is_current_word_bad = True
@@ -340,9 +340,9 @@ class SuperWeirdWordPlugin(MessDetectorPlugin):
             self._buffer_accent_count = 0
             self._buffer_glyph_count = 0
         elif (
-            character not in {"<", ">", "-", "=", "~", "|", "_"}
-            and character.isdigit() is False
-            and is_symbol(character)
+                character not in {"<", ">", "-", "=", "~", "|", "_"}
+                and character.isdigit() is False
+                and is_symbol(character)
         ):
             self._is_current_word_bad = True
             self._buffer += character
@@ -419,9 +419,9 @@ class ArchaicUpperLowerPlugin(MessDetectorPlugin):
 
         if chunk_sep and self._character_count_since_last_sep > 0:
             if (
-                self._character_count_since_last_sep <= 64
-                and character.isdigit() is False
-                and self._current_ascii_only is False
+                    self._character_count_since_last_sep <= 64
+                    and character.isdigit() is False
+                    and self._current_ascii_only is False
             ):
                 self._successive_upper_lower_count_final += (
                     self._successive_upper_lower_count
@@ -441,7 +441,7 @@ class ArchaicUpperLowerPlugin(MessDetectorPlugin):
 
         if self._last_alpha_seen is not None:
             if (character.isupper() and self._last_alpha_seen.islower()) or (
-                character.islower() and self._last_alpha_seen.isupper()
+                    character.islower() and self._last_alpha_seen.isupper()
             ):
                 if self._buf is True:
                     self._successive_upper_lower_count += 2
@@ -502,7 +502,7 @@ class ArabicIsolatedFormPlugin(MessDetectorPlugin):
 
 @lru_cache(maxsize=1024)
 def is_suspiciously_successive_range(
-    unicode_range_a: str | None, unicode_range_b: str | None
+        unicode_range_a: str | None, unicode_range_b: str | None
 ) -> bool:
     """
     Determine if two Unicode range seen next to each other can be considered as suspicious.
@@ -522,7 +522,7 @@ def is_suspiciously_successive_range(
     # Latin characters can be accompanied with a combining diacritical mark
     # eg. Vietnamese.
     if ("Latin" in unicode_range_a or "Latin" in unicode_range_b) and (
-        "Combining" in unicode_range_a or "Combining" in unicode_range_b
+            "Combining" in unicode_range_a or "Combining" in unicode_range_b
     ):
         return False
 
@@ -547,7 +547,7 @@ def is_suspiciously_successive_range(
         unicode_range_b in ("Hiragana", "Katakana"),
     )
     if (range_a_jp_chars or range_b_jp_chars) and (
-        "CJK" in unicode_range_a or "CJK" in unicode_range_b
+            "CJK" in unicode_range_a or "CJK" in unicode_range_b
     ):
         return False
     if range_a_jp_chars and range_b_jp_chars:
@@ -561,8 +561,8 @@ def is_suspiciously_successive_range(
 
     # Chinese/Japanese use dedicated range for punctuation and/or separators.
     if ("CJK" in unicode_range_a or "CJK" in unicode_range_b) or (
-        unicode_range_a in ["Katakana", "Hiragana"]
-        and unicode_range_b in ["Katakana", "Hiragana"]
+            unicode_range_a in ["Katakana", "Hiragana"]
+            and unicode_range_b in ["Katakana", "Hiragana"]
     ):
         if "Punctuation" in unicode_range_a or "Punctuation" in unicode_range_b:
             return False
@@ -576,7 +576,7 @@ def is_suspiciously_successive_range(
 
 @lru_cache(maxsize=2048)
 def mess_ratio(
-    decoded_sequence: str, maximum_threshold: float = 0.2, debug: bool = False
+        decoded_sequence: str, maximum_threshold: float = 0.2, debug: bool = False
 ) -> float:
     """
     Compute a mess ratio given a decoded bytes sequence. The maximum threshold does stop the computation earlier.
@@ -603,7 +603,7 @@ def mess_ratio(
                 detector.feed(character)
 
         if (
-            index > 0 and index % intermediary_mean_mess_ratio_calc == 0
+                index > 0 and index % intermediary_mean_mess_ratio_calc == 0
         ) or index == length - 1:
             mean_mess_ratio = sum(dt.ratio for dt in detectors)
 

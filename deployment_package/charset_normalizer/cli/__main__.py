@@ -54,8 +54,8 @@ def cli_detect(argv: list[str] | None = None) -> int:
     """
     parser = argparse.ArgumentParser(
         description="The Real First Universal Charset Detector. "
-        "Discover originating encoding used on text file. "
-        "Normalize text to unicode."
+                    "Discover originating encoding used on text file. "
+                    "Normalize text to unicode."
     )
 
     parser.add_argument(
@@ -68,7 +68,7 @@ def cli_detect(argv: list[str] | None = None) -> int:
         default=False,
         dest="verbose",
         help="Display complementary information about file if any. "
-        "Stdout will contain logs about the detection process.",
+             "Stdout will contain logs about the detection process.",
     )
     parser.add_argument(
         "-a",
@@ -267,14 +267,14 @@ def cli_detect(argv: list[str] | None = None) -> int:
                     if my_file.closed is False:
                         my_file.close()
                 elif (
-                    args.force is False
-                    and query_yes_no(
-                        'Are you sure to normalize "{}" by replacing it ?'.format(
-                            my_file.name
-                        ),
-                        "no",
-                    )
-                    is False
+                        args.force is False
+                        and query_yes_no(
+                    'Are you sure to normalize "{}" by replacing it ?'.format(
+                        my_file.name
+                    ),
+                    "no",
+                )
+                        is False
                 ):
                     if my_file.closed is False:
                         my_file.close()

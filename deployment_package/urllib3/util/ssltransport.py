@@ -12,7 +12,6 @@ if typing.TYPE_CHECKING:
 
     from .ssl_ import _TYPE_PEER_CERT_RET, _TYPE_PEER_CERT_RET_DICT
 
-
 _WriteBuffer = typing.Union[bytearray, memoryview]
 _ReturnValue = typing.TypeVar("_ReturnValue")
 
@@ -47,11 +46,11 @@ class SSLTransport:
             )
 
     def __init__(
-        self,
-        socket: socket.socket,
-        ssl_context: ssl.SSLContext,
-        server_hostname: str | None = None,
-        suppress_ragged_eofs: bool = True,
+            self,
+            socket: socket.socket,
+            ssl_context: ssl.SSLContext,
+            server_hostname: str | None = None,
+            suppress_ragged_eofs: bool = True,
     ) -> None:
         """
         Create an SSLTransport around socket using the provided ssl_context.
@@ -87,10 +86,10 @@ class SSLTransport:
         return self._wrap_ssl_read(buflen)
 
     def recv_into(
-        self,
-        buffer: _WriteBuffer,
-        nbytes: int | None = None,
-        flags: int = 0,
+            self,
+            buffer: _WriteBuffer,
+            nbytes: int | None = None,
+            flags: int = 0,
     ) -> None | int | bytes:
         if flags != 0:
             raise ValueError("non-zero flags not allowed in calls to recv_into")
@@ -114,13 +113,13 @@ class SSLTransport:
         return self._ssl_io_loop(self.sslobj.write, data)
 
     def makefile(
-        self,
-        mode: str,
-        buffering: int | None = None,
-        *,
-        encoding: str | None = None,
-        errors: str | None = None,
-        newline: str | None = None,
+            self,
+            mode: str,
+            buffering: int | None = None,
+            *,
+            encoding: str | None = None,
+            errors: str | None = None,
+            newline: str | None = None,
     ) -> typing.BinaryIO | typing.TextIO | socket.SocketIO:
         """
         Python's httpclient uses makefile and buffered io when reading HTTP
@@ -173,11 +172,13 @@ class SSLTransport:
 
     @typing.overload
     def getpeercert(
-        self, binary_form: typing.Literal[False] = ...
-    ) -> _TYPE_PEER_CERT_RET_DICT | None: ...
+            self, binary_form: typing.Literal[False] = ...
+    ) -> _TYPE_PEER_CERT_RET_DICT | None:
+        ...
 
     @typing.overload
-    def getpeercert(self, binary_form: typing.Literal[True]) -> bytes | None: ...
+    def getpeercert(self, binary_form: typing.Literal[True]) -> bytes | None:
+        ...
 
     def getpeercert(self, binary_form: bool = False) -> _TYPE_PEER_CERT_RET:
         return self.sslobj.getpeercert(binary_form)  # type: ignore[return-value]
@@ -217,26 +218,29 @@ class SSLTransport:
 
     # func is sslobj.do_handshake or sslobj.unwrap
     @typing.overload
-    def _ssl_io_loop(self, func: typing.Callable[[], None]) -> None: ...
+    def _ssl_io_loop(self, func: typing.Callable[[], None]) -> None:
+        ...
 
     # func is sslobj.write, arg1 is data
     @typing.overload
-    def _ssl_io_loop(self, func: typing.Callable[[bytes], int], arg1: bytes) -> int: ...
+    def _ssl_io_loop(self, func: typing.Callable[[bytes], int], arg1: bytes) -> int:
+        ...
 
     # func is sslobj.read, arg1 is len, arg2 is buffer
     @typing.overload
     def _ssl_io_loop(
-        self,
-        func: typing.Callable[[int, bytearray | None], bytes],
-        arg1: int,
-        arg2: bytearray | None,
-    ) -> bytes: ...
+            self,
+            func: typing.Callable[[int, bytearray | None], bytes],
+            arg1: int,
+            arg2: bytearray | None,
+    ) -> bytes:
+        ...
 
     def _ssl_io_loop(
-        self,
-        func: typing.Callable[..., _ReturnValue],
-        arg1: None | bytes | int = None,
-        arg2: bytearray | None = None,
+            self,
+            func: typing.Callable[..., _ReturnValue],
+            arg1: None | bytes | int = None,
+            arg2: bytearray | None = None,
     ) -> _ReturnValue:
         """Performs an I/O loop between incoming/outgoing and the socket."""
         should_loop = True

@@ -31,10 +31,10 @@ __all__ = ["wait_for_read", "wait_for_write"]
 
 
 def select_wait_for_socket(
-    sock: socket.socket,
-    read: bool = False,
-    write: bool = False,
-    timeout: float | None = None,
+        sock: socket.socket,
+        read: bool = False,
+        write: bool = False,
+        timeout: float | None = None,
 ) -> bool:
     if not read and not write:
         raise RuntimeError("must specify at least one of read=True, write=True")
@@ -55,10 +55,10 @@ def select_wait_for_socket(
 
 
 def poll_wait_for_socket(
-    sock: socket.socket,
-    read: bool = False,
-    write: bool = False,
-    timeout: float | None = None,
+        sock: socket.socket,
+        read: bool = False,
+        write: bool = False,
+        timeout: float | None = None,
 ) -> bool:
     if not read and not write:
         raise RuntimeError("must specify at least one of read=True, write=True")
@@ -93,10 +93,10 @@ def _have_working_poll() -> bool:
 
 
 def wait_for_socket(
-    sock: socket.socket,
-    read: bool = False,
-    write: bool = False,
-    timeout: float | None = None,
+        sock: socket.socket,
+        read: bool = False,
+        write: bool = False,
+        timeout: float | None = None,
 ) -> bool:
     # We delay choosing which implementation to use until the first time we're
     # called. We could do it at import time, but then we might make the wrong

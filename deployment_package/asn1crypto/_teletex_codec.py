@@ -33,12 +33,10 @@ class TeletexIncrementalDecoder(codecs.IncrementalDecoder):
 
 
 class TeletexStreamWriter(TeletexCodec, codecs.StreamWriter):
-
     pass
 
 
 class TeletexStreamReader(TeletexCodec, codecs.StreamReader):
-
     pass
 
 

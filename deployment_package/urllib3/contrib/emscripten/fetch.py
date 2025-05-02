@@ -76,11 +76,11 @@ _STREAMING_WORKER_CODE = (
 
 class _RequestError(Exception):
     def __init__(
-        self,
-        message: str | None = None,
-        *,
-        request: EmscriptenRequest | None = None,
-        response: EmscriptenResponse | None = None,
+            self,
+            message: str | None = None,
+            *,
+            request: EmscriptenRequest | None = None,
+            response: EmscriptenResponse | None = None,
     ):
         self.request = request
         self.response = response
@@ -102,13 +102,13 @@ def _obj_from_dict(dict_val: dict[str, Any]) -> JsProxy:
 
 class _ReadStream(io.RawIOBase):
     def __init__(
-        self,
-        int_buffer: JsArray,
-        byte_buffer: JsArray,
-        timeout: float,
-        worker: JsProxy,
-        connection_id: int,
-        request: EmscriptenRequest,
+            self,
+            int_buffer: JsArray,
+            byte_buffer: JsArray,
+            timeout: float,
+            worker: JsProxy,
+            connection_id: int,
+            request: EmscriptenRequest,
     ):
         self.int_buffer = int_buffer
         self.byte_buffer = byte_buffer
@@ -168,8 +168,8 @@ class _ReadStream(io.RawIOBase):
             js.Atomics.store(self.int_buffer, 0, ERROR_TIMEOUT)
             self.worker.postMessage(_obj_from_dict({"getMore": self.connection_id}))
             if (
-                js.Atomics.wait(self.int_buffer, 0, ERROR_TIMEOUT, self.timeout)
-                == "timed-out"
+                    js.Atomics.wait(self.int_buffer, 0, ERROR_TIMEOUT, self.timeout)
+                    == "timed-out"
             ):
                 raise _TimeoutError
             data_len = self.int_buffer[0]
@@ -324,12 +324,12 @@ class _JSPIReadStream(io.RawIOBase):
     """
 
     def __init__(
-        self,
-        js_read_stream: Any,
-        timeout: float,
-        request: EmscriptenRequest,
-        response: EmscriptenResponse,
-        js_abort_controller: Any,  # JavaScript AbortController for timeouts
+            self,
+            js_read_stream: Any,
+            timeout: float,
+            request: EmscriptenRequest,
+            response: EmscriptenResponse,
+            js_abort_controller: Any,  # JavaScript AbortController for timeouts
     ):
         self.js_read_stream = js_read_stream
         self.timeout = timeout
@@ -400,8 +400,8 @@ class _JSPIReadStream(io.RawIOBase):
             len(byte_obj), len(self.current_buffer) - self.current_buffer_pos
         )
         byte_obj[0:ret_length] = self.current_buffer[
-            self.current_buffer_pos : self.current_buffer_pos + ret_length
-        ]
+                                 self.current_buffer_pos: self.current_buffer_pos + ret_length
+                                 ]
         self.current_buffer_pos += ret_length
         if self.current_buffer_pos == len(self.current_buffer):
             self.current_buffer = None
@@ -419,10 +419,10 @@ def is_cross_origin_isolated() -> bool:
 
 def is_in_node() -> bool:
     return (
-        hasattr(js, "process")
-        and hasattr(js.process, "release")
-        and hasattr(js.process.release, "name")
-        and js.process.release.name == "node"
+            hasattr(js, "process")
+            and hasattr(js.process, "release")
+            and hasattr(js.process.release, "name")
+            and js.process.release.name == "node"
     )
 
 
@@ -433,13 +433,12 @@ def is_worker_available() -> bool:
 _fetcher: _StreamingFetcher | None = None
 
 if is_worker_available() and (
-    (is_cross_origin_isolated() and not is_in_browser_main_thread())
-    and (not is_in_node())
+        (is_cross_origin_isolated() and not is_in_browser_main_thread())
+        and (not is_in_node())
 ):
     _fetcher = _StreamingFetcher()
 else:
     _fetcher = None
-
 
 NODE_JSPI_ERROR = (
     "urllib3 only works in Node.js with pyodide.runPythonAsync"
@@ -548,7 +547,7 @@ def send_request(request: EmscriptenRequest) -> EmscriptenResponse:
 
 
 def send_jspi_request(
-    request: EmscriptenRequest, streaming: bool
+        request: EmscriptenRequest, streaming: bool
 ) -> EmscriptenResponse:
     """
     Send a request using WebAssembly JavaScript Promise Integration
@@ -621,11 +620,11 @@ def send_jspi_request(
 
 
 def _run_sync_with_timeout(
-    promise: Any,
-    timeout: float,
-    js_abort_controller: Any,
-    request: EmscriptenRequest | None,
-    response: EmscriptenResponse | None,
+        promise: Any,
+        timeout: float,
+        js_abort_controller: Any,
+        request: EmscriptenRequest | None,
+        response: EmscriptenResponse | None,
 ) -> Any:
     """
     Await a JavaScript promise synchronously with a timeout which is implemented

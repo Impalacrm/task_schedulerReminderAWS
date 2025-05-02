@@ -161,25 +161,25 @@ class PGInterval:
         else:
             parts = interval_str.split()
             if (len(parts) > 1 and parts[1][0].isalpha()) or (
-                len(parts) == 1 and ":" in parts[0]
+                    len(parts) == 1 and ":" in parts[0]
             ):
                 return cls.from_str_postgres(interval_str)
             else:
                 return cls.from_str_sql_standard(interval_str)
 
     def __init__(
-        self,
-        millennia=None,
-        centuries=None,
-        decades=None,
-        years=None,
-        months=None,
-        weeks=None,
-        days=None,
-        hours=None,
-        minutes=None,
-        seconds=None,
-        microseconds=None,
+            self,
+            millennia=None,
+            centuries=None,
+            decades=None,
+            years=None,
+            months=None,
+            weeks=None,
+            days=None,
+            hours=None,
+            minutes=None,
+            seconds=None,
+            microseconds=None,
     ):
         self.millennia = millennia
         self.centuries = centuries
@@ -271,11 +271,11 @@ class PGInterval:
 
 class Range:
     def __init__(
-        self,
-        lower=None,
-        upper=None,
-        bounds="[)",
-        is_empty=False,
+            self,
+            lower=None,
+            upper=None,
+            bounds="[)",
+            is_empty=False,
     ):
         self.lower = lower
         self.upper = upper
@@ -288,9 +288,9 @@ class Range:
                 return self.is_empty == other.is_empty
             else:
                 return (
-                    self.lower == other.lower
-                    and self.upper == other.upper
-                    and self.bounds == other.bounds
+                        self.lower == other.lower
+                        and self.upper == other.upper
+                        and self.bounds == other.bounds
                 )
         return False
 

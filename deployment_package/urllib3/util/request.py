@@ -5,8 +5,8 @@ import typing
 from base64 import b64encode
 from enum import Enum
 
-from ..exceptions import UnrewindableBodyError
 from .util import to_bytes
+from ..exceptions import UnrewindableBodyError
 
 if typing.TYPE_CHECKING:
     from typing import Final
@@ -53,12 +53,12 @@ _METHODS_NOT_EXPECTING_BODY = {"GET", "HEAD", "DELETE", "TRACE", "OPTIONS", "CON
 
 
 def make_headers(
-    keep_alive: bool | None = None,
-    accept_encoding: bool | list[str] | str | None = None,
-    user_agent: str | None = None,
-    basic_auth: str | None = None,
-    proxy_basic_auth: str | None = None,
-    disable_cache: bool | None = None,
+        keep_alive: bool | None = None,
+        accept_encoding: bool | list[str] | str | None = None,
+        user_agent: str | None = None,
+        basic_auth: str | None = None,
+        proxy_basic_auth: str | None = None,
+        disable_cache: bool | None = None,
 ) -> dict[str, str]:
     """
     Shortcuts for generating request headers.
@@ -134,7 +134,7 @@ def make_headers(
 
 
 def set_file_position(
-    body: typing.Any, pos: _TYPE_BODY_POSITION | None
+        body: typing.Any, pos: _TYPE_BODY_POSITION | None
 ) -> _TYPE_BODY_POSITION | None:
     """
     If a position is provided, move file to that point.
@@ -189,7 +189,7 @@ class ChunksAndContentLength(typing.NamedTuple):
 
 
 def body_to_chunks(
-    body: typing.Any | None, method: str, blocksize: int
+        body: typing.Any | None, method: str, blocksize: int
 ) -> ChunksAndContentLength:
     """Takes the HTTP request method, body, and blocksize and
     transforms them into an iterable of chunks to pass to

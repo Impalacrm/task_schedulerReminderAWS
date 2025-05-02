@@ -1,14 +1,13 @@
-import logging
-from db_connections import get_task_db_connection
-from helpers import get_user_basic_info_raw,get_contact_basic_info_raw,convert_utc_to_local,send_task_reminder_email
-from datetime import datetime
-import os
 import datetime
-from dotenv import load_dotenv
+import logging
+import os
+from datetime import datetime
 
+from db_connections import get_task_db_connection
+from dotenv import load_dotenv
+from helpers import get_user_basic_info_raw, get_contact_basic_info_raw, convert_utc_to_local, send_task_reminder_email
 
 load_dotenv()
-
 
 
 def check_due_tasks():
@@ -39,27 +38,22 @@ def check_due_tasks():
                     task_title, task_description, due_at, reminder_at
                 ) = row
 
-
                 user_info = get_user_basic_info_raw(user_id)
                 if not user_info:
                     logging.warning(f"User {user_id} not found. Skipping task {task_id}.")
                     continue
 
-                user_timezone = user_info.get("timezone","UTC")
-
+                user_timezone = user_info.get("timezone", "UTC")
 
                 local_due_datetime = convert_utc_to_local(due_at, user_timezone)
                 local_now_datetime = convert_utc_to_local(datetime.datetime.utcnow(), user_timezone)
 
-
                 if local_due_datetime.date() == local_now_datetime.date() and local_now_datetime >= local_due_datetime:
-
 
                     contact_info = get_contact_basic_info_raw(contact_id)
                     if not contact_info:
                         logging.warning(f"Contact {contact_id} not found. Skipping task {task_id}.")
                         continue
-
 
                     task_reminder_payload = {
                         "task_title": task_title,
@@ -88,7 +82,6 @@ def check_due_tasks():
                         logging.error(f"Failed to send reminder for task_id={task_id}: {email_error}")
                         continue
 
-
                     try:
                         with task_db_conn.cursor() as update_cursor:
                             update_cursor.execute("UPDATE tasks SET reminder_sent = true WHERE id = %s", (task_id,))
@@ -106,6 +99,3 @@ def check_due_tasks():
 
     finally:
         task_db_conn.close()
-
-
-

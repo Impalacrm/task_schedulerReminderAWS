@@ -87,10 +87,10 @@ class SOCKSConnection(HTTPConnection):
     """
 
     def __init__(
-        self,
-        _socks_options: _TYPE_SOCKS_OPTIONS,
-        *args: typing.Any,
-        **kwargs: typing.Any,
+            self,
+            _socks_options: _TYPE_SOCKS_OPTIONS,
+            *args: typing.Any,
+            **kwargs: typing.Any,
     ) -> None:
         self._socks_options = _socks_options
         super().__init__(*args, **kwargs)
@@ -182,13 +182,13 @@ class SOCKSProxyManager(PoolManager):
     }
 
     def __init__(
-        self,
-        proxy_url: str,
-        username: str | None = None,
-        password: str | None = None,
-        num_pools: int = 10,
-        headers: typing.Mapping[str, str] | None = None,
-        **connection_pool_kw: typing.Any,
+            self,
+            proxy_url: str,
+            username: str | None = None,
+            password: str | None = None,
+            num_pools: int = 10,
+            headers: typing.Mapping[str, str] | None = None,
+            **connection_pool_kw: typing.Any,
     ):
         parsed = parse_url(proxy_url)
 

@@ -5,46 +5,14 @@ from warnings import warn
 import pg8000
 from pg8000.converters import (
     BIGINT,
-    BOOLEAN,
-    BOOLEAN_ARRAY,
-    BYTES,
-    CHAR,
-    CHAR_ARRAY,
-    DATE,
-    FLOAT,
-    FLOAT_ARRAY,
-    INET,
-    INT2VECTOR,
-    INTEGER,
-    INTEGER_ARRAY,
     INTERVAL,
-    JSON,
-    JSONB,
-    MACADDR,
-    NAME,
-    NAME_ARRAY,
-    NULLTYPE,
     NUMERIC,
     NUMERIC_ARRAY,
     OID,
-    PGInterval,
     PY_PG,
-    Range,
-    STRING,
-    TEXT,
-    TEXT_ARRAY,
-    TIME,
     TIMESTAMP,
-    TIMESTAMPTZ,
     UNKNOWN,
-    UUID_TYPE,
-    VARCHAR,
-    VARCHAR_ARRAY,
-    XID,
-    interval_in as timedelta_in,
     make_params,
-    pg_interval_in as pginterval_in,
-    pg_interval_out as pginterval_out,
 )
 from pg8000.core import (
     Context,
@@ -54,18 +22,11 @@ from pg8000.core import (
     ver,
 )
 from pg8000.dbapi import (
-    BINARY,
-    Binary,
-    DataError,
-    DateFromTicks,
     IntegrityError,
     InternalError,
     NotSupportedError,
     OperationalError,
     ProgrammingError,
-    TimeFromTicks,
-    Timestamp,
-    TimestampFromTicks,
     Warning,
     convert_paramstyle,
 )
@@ -103,7 +64,6 @@ __version__ = ver
 
 __author__ = "Mathieu Fenniak"
 
-
 BIGINTEGER = BIGINT
 DATETIME = TIMESTAMP
 NUMBER = DECIMAL = NUMERIC
@@ -113,18 +73,18 @@ TIMEDELTA = INTERVAL
 
 
 def connect(
-    user,
-    host="localhost",
-    database=None,
-    port=5432,
-    password=None,
-    source_address=None,
-    unix_sock=None,
-    ssl_context=None,
-    timeout=None,
-    tcp_keepalive=True,
-    application_name=None,
-    replication=None,
+        user,
+        host="localhost",
+        database=None,
+        port=5432,
+        password=None,
+        source_address=None,
+        unix_sock=None,
+        ssl_context=None,
+        timeout=None,
+        tcp_keepalive=True,
+        application_name=None,
+        replication=None,
 ):
     return Connection(
         user,

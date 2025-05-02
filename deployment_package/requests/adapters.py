@@ -63,16 +63,13 @@ except ImportError:
     def SOCKSProxyManager(*args, **kwargs):
         raise InvalidSchema("Missing dependencies for SOCKS support.")
 
-
 if typing.TYPE_CHECKING:
     from .models import PreparedRequest
-
 
 DEFAULT_POOLBLOCK = False
 DEFAULT_POOLSIZE = 10
 DEFAULT_RETRIES = 0
 DEFAULT_POOL_TIMEOUT = None
-
 
 try:
     import ssl  # noqa: F401
@@ -88,10 +85,10 @@ except ImportError:
 
 
 def _urllib3_request_context(
-    request: "PreparedRequest",
-    verify: "bool | str | None",
-    client_cert: "typing.Tuple[str, str] | str | None",
-    poolmanager: "PoolManager",
+        request: "PreparedRequest",
+        verify: "bool | str | None",
+        client_cert: "typing.Tuple[str, str] | str | None",
+        poolmanager: "PoolManager",
 ) -> "(typing.Dict[str, typing.Any], typing.Dict[str, typing.Any])":
     host_params = {}
     pool_kwargs = {}
@@ -104,7 +101,7 @@ def _urllib3_request_context(
     poolmanager_kwargs = getattr(poolmanager, "connection_pool_kw", {})
     has_poolmanager_ssl_context = poolmanager_kwargs.get("ssl_context")
     should_use_default_ssl_context = (
-        _preloaded_ssl_context is not None and not has_poolmanager_ssl_context
+            _preloaded_ssl_context is not None and not has_poolmanager_ssl_context
     )
 
     cert_reqs = "CERT_REQUIRED"
@@ -141,7 +138,7 @@ class BaseAdapter:
         super().__init__()
 
     def send(
-        self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None
+            self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None
     ):
         """Sends PreparedRequest object. Returns Response object.
 
@@ -200,11 +197,11 @@ class HTTPAdapter(BaseAdapter):
     ]
 
     def __init__(
-        self,
-        pool_connections=DEFAULT_POOLSIZE,
-        pool_maxsize=DEFAULT_POOLSIZE,
-        max_retries=DEFAULT_RETRIES,
-        pool_block=DEFAULT_POOLBLOCK,
+            self,
+            pool_connections=DEFAULT_POOLSIZE,
+            pool_maxsize=DEFAULT_POOLSIZE,
+            max_retries=DEFAULT_RETRIES,
+            pool_block=DEFAULT_POOLBLOCK,
     ):
         if max_retries == DEFAULT_RETRIES:
             self.max_retries = Retry(0, read=False)
@@ -238,7 +235,7 @@ class HTTPAdapter(BaseAdapter):
         )
 
     def init_poolmanager(
-        self, connections, maxsize, block=DEFAULT_POOLBLOCK, **pool_kwargs
+            self, connections, maxsize, block=DEFAULT_POOLBLOCK, **pool_kwargs
     ):
         """Initializes a urllib3 PoolManager.
 
@@ -611,7 +608,7 @@ class HTTPAdapter(BaseAdapter):
         return headers
 
     def send(
-        self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None
+            self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None
     ):
         """Sends PreparedRequest object. Returns Response object.
 

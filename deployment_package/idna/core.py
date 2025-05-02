@@ -108,7 +108,8 @@ def check_bidi(label: str, check_ltr: bool = False) -> bool:
                 "BN",
                 "NSM",
             ]:
-                raise IDNABidiError("Invalid direction for codepoint at position {} in a right-to-left label".format(idx))
+                raise IDNABidiError(
+                    "Invalid direction for codepoint at position {} in a right-to-left label".format(idx))
             # Bidi rule 3
             if direction in ["R", "AL", "EN", "AN"]:
                 valid_ending = True
@@ -124,7 +125,8 @@ def check_bidi(label: str, check_ltr: bool = False) -> bool:
         else:
             # Bidi rule 5
             if direction not in ["L", "EN", "ES", "CS", "ET", "ON", "BN", "NSM"]:
-                raise IDNABidiError("Invalid direction for codepoint at position {} in a left-to-right label".format(idx))
+                raise IDNABidiError(
+                    "Invalid direction for codepoint at position {} in a left-to-right label".format(idx))
             # Bidi rule 6
             if direction in ["L", "EN"]:
                 valid_ending = True
@@ -312,7 +314,7 @@ def ulabel(label: Union[str, bytes, bytearray]) -> str:
 
     label_bytes = label_bytes.lower()
     if label_bytes.startswith(_alabel_prefix):
-        label_bytes = label_bytes[len(_alabel_prefix) :]
+        label_bytes = label_bytes[len(_alabel_prefix):]
         if not label_bytes:
             raise IDNAError("Malformed A-label, no Punycode eligible content found")
         if label_bytes.decode("ascii")[-1] == "-":
@@ -338,19 +340,20 @@ def uts46_remap(domain: str, std3_rules: bool = True, transitional: bool = False
     for pos, char in enumerate(domain):
         code_point = ord(char)
         try:
-            uts46row = uts46data[code_point if code_point < 256 else bisect.bisect_left(uts46data, (code_point, "Z")) - 1]
+            uts46row = uts46data[
+                code_point if code_point < 256 else bisect.bisect_left(uts46data, (code_point, "Z")) - 1]
             status = uts46row[1]
             replacement: Optional[str] = None
             if len(uts46row) == 3:
                 replacement = uts46row[2]
             if (
-                status == "V"
-                or (status == "D" and not transitional)
-                or (status == "3" and not std3_rules and replacement is None)
+                    status == "V"
+                    or (status == "D" and not transitional)
+                    or (status == "3" and not std3_rules and replacement is None)
             ):
                 output += char
             elif replacement is not None and (
-                status == "M" or (status == "3" and not std3_rules) or (status == "D" and transitional)
+                    status == "M" or (status == "3" and not std3_rules) or (status == "D" and transitional)
             ):
                 output += replacement
             elif status != "I":
@@ -364,11 +367,11 @@ def uts46_remap(domain: str, std3_rules: bool = True, transitional: bool = False
 
 
 def encode(
-    s: Union[str, bytes, bytearray],
-    strict: bool = False,
-    uts46: bool = False,
-    std3_rules: bool = False,
-    transitional: bool = False,
+        s: Union[str, bytes, bytearray],
+        strict: bool = False,
+        uts46: bool = False,
+        std3_rules: bool = False,
+        transitional: bool = False,
 ) -> bytes:
     if not isinstance(s, str):
         try:
@@ -403,10 +406,10 @@ def encode(
 
 
 def decode(
-    s: Union[str, bytes, bytearray],
-    strict: bool = False,
-    uts46: bool = False,
-    std3_rules: bool = False,
+        s: Union[str, bytes, bytearray],
+        strict: bool = False,
+        uts46: bool = False,
+        std3_rules: bool = False,
 ) -> str:
     try:
         if not isinstance(s, str):

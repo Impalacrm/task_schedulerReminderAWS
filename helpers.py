@@ -1,9 +1,10 @@
-from dateutil import tz
-from db_connections import get_main_crm_connection
-import requests
 import logging
 from typing import Optional
 
+import requests
+from dateutil import tz
+
+from db_connections import get_main_crm_connection
 
 
 def convert_utc_to_local(utc_datetime, user_time_zone):
@@ -17,17 +18,12 @@ def convert_utc_to_local(utc_datetime, user_time_zone):
     if not utc_datetime:
         return None
 
-
     if utc_datetime.tzinfo is None:
         utc_datetime = utc_datetime.replace(tzinfo=tz.tzutc())
-
 
     to_zone = tz.gettz(user_time_zone) or tz.tzutc()
 
     return utc_datetime.astimezone(to_zone)
-
-
-
 
 
 def get_user_basic_info_raw(user_id):
@@ -62,8 +58,6 @@ def get_user_basic_info_raw(user_id):
         db_connection.close()
 
 
-
-
 def get_contact_basic_info_raw(contact_id):
     """
     Retrieves first_name, last_name, email, phone for a contact from the 'contacts' table.
@@ -94,9 +88,6 @@ def get_contact_basic_info_raw(contact_id):
         return None
     finally:
         db_connection.close()
-
-
-
 
 
 def send_task_reminder_email(
@@ -137,11 +128,9 @@ def send_task_reminder_email(
     except requests.RequestException as e:
         error_message = f"Error calling email service: {e}"
 
-
         if response is not None:
             error_message += f", Response: {response.text}"
 
         logging.error(error_message)
         return {"error": error_message,
                 "status_code": response.status_code if response else None}
-

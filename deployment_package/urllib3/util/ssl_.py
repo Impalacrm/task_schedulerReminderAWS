@@ -9,8 +9,8 @@ import typing
 import warnings
 from binascii import unhexlify
 
-from ..exceptions import ProxySchemeUnsupported, SSLError
 from .url import _BRACELESS_IPV6_ADDRZ_RE, _IPV4_RE
+from ..exceptions import ProxySchemeUnsupported, SSLError
 
 SSLContext = None
 SSLTransport = None
@@ -28,9 +28,9 @@ HASHFUNC_MAP = {
 
 
 def _is_bpo_43522_fixed(
-    implementation_name: str,
-    version_info: _TYPE_VERSION_INFO,
-    pypy_version_info: _TYPE_VERSION_INFO | None,
+        implementation_name: str,
+        version_info: _TYPE_VERSION_INFO,
+        pypy_version_info: _TYPE_VERSION_INFO | None,
 ) -> bool:
     """Return True for CPython 3.9.3+ or 3.10+ and PyPy 7.3.8+ where
     setting SSLContext.hostname_checks_common_name to False works.
@@ -54,11 +54,11 @@ def _is_bpo_43522_fixed(
 
 
 def _is_has_never_check_common_name_reliable(
-    openssl_version: str,
-    openssl_version_number: int,
-    implementation_name: str,
-    version_info: _TYPE_VERSION_INFO,
-    pypy_version_info: _TYPE_VERSION_INFO | None,
+        openssl_version: str,
+        openssl_version_number: int,
+        implementation_name: str,
+        version_info: _TYPE_VERSION_INFO,
+        pypy_version_info: _TYPE_VERSION_INFO | None,
 ) -> bool:
     # As of May 2023, all released versions of LibreSSL fail to reject certificates with
     # only common names, see https://github.com/urllib3/urllib3/pull/3024
@@ -70,8 +70,8 @@ def _is_has_never_check_common_name_reliable(
     is_openssl_issue_14579_fixed = openssl_version_number >= 0x101010CF
 
     return is_openssl and (
-        is_openssl_issue_14579_fixed
-        or _is_bpo_43522_fixed(implementation_name, version_info, pypy_version_info)
+            is_openssl_issue_14579_fixed
+            or _is_bpo_43522_fixed(implementation_name, version_info, pypy_version_info)
     )
 
 
@@ -81,11 +81,11 @@ if typing.TYPE_CHECKING:
 
     from .ssltransport import SSLTransport as SSLTransportType
 
+
     class _TYPE_PEER_CERT_RET_DICT(TypedDict, total=False):
         subjectAltName: tuple[tuple[str, str], ...]
         subject: tuple[tuple[tuple[str, str], ...], ...]
         serialNumber: str
-
 
 # Mapping from 'ssl.PROTOCOL_TLSX' to 'TLSVersion.X'
 _SSL_VERSION_TO_TLS_VERSION: dict[int, int] = {}
@@ -112,11 +112,11 @@ try:  # Do we have ssl at all?
     # Setting SSLContext.hostname_checks_common_name = False didn't work before CPython
     # 3.9.3, and 3.10 (but OK on PyPy) or OpenSSL 1.1.1l+
     if HAS_NEVER_CHECK_COMMON_NAME and not _is_has_never_check_common_name_reliable(
-        OPENSSL_VERSION,
-        OPENSSL_VERSION_NUMBER,
-        sys.implementation.name,
-        sys.version_info,
-        sys.pypy_version_info if sys.implementation.name == "pypy" else None,  # type: ignore[attr-defined]
+            OPENSSL_VERSION,
+            OPENSSL_VERSION_NUMBER,
+            sys.implementation.name,
+            sys.version_info,
+            sys.pypy_version_info if sys.implementation.name == "pypy" else None,  # type: ignore[attr-defined]
     ):
         HAS_NEVER_CHECK_COMMON_NAME = False
 
@@ -138,7 +138,6 @@ except ImportError:
     OP_NO_SSLv3 = 0x2000000  # type: ignore[assignment]
     PROTOCOL_SSLv23 = PROTOCOL_TLS = 2  # type: ignore[assignment]
     PROTOCOL_TLS_CLIENT = 16  # type: ignore[assignment]
-
 
 _TYPE_PEER_CERT_RET = typing.Union["_TYPE_PEER_CERT_RET_DICT", bytes, None]
 
@@ -217,12 +216,12 @@ def resolve_ssl_version(candidate: None | int | str) -> int:
 
 
 def create_urllib3_context(
-    ssl_version: int | None = None,
-    cert_reqs: int | None = None,
-    options: int | None = None,
-    ciphers: str | None = None,
-    ssl_minimum_version: int | None = None,
-    ssl_maximum_version: int | None = None,
+        ssl_version: int | None = None,
+        cert_reqs: int | None = None,
+        options: int | None = None,
+        ciphers: str | None = None,
+        ssl_minimum_version: int | None = None,
+        ssl_maximum_version: int | None = None,
 ) -> ssl.SSLContext:
     """Creates and configures an :class:`ssl.SSLContext` instance for use with urllib3.
 
@@ -353,54 +352,54 @@ def create_urllib3_context(
 
 @typing.overload
 def ssl_wrap_socket(
-    sock: socket.socket,
-    keyfile: str | None = ...,
-    certfile: str | None = ...,
-    cert_reqs: int | None = ...,
-    ca_certs: str | None = ...,
-    server_hostname: str | None = ...,
-    ssl_version: int | None = ...,
-    ciphers: str | None = ...,
-    ssl_context: ssl.SSLContext | None = ...,
-    ca_cert_dir: str | None = ...,
-    key_password: str | None = ...,
-    ca_cert_data: None | str | bytes = ...,
-    tls_in_tls: typing.Literal[False] = ...,
+        sock: socket.socket,
+        keyfile: str | None = ...,
+        certfile: str | None = ...,
+        cert_reqs: int | None = ...,
+        ca_certs: str | None = ...,
+        server_hostname: str | None = ...,
+        ssl_version: int | None = ...,
+        ciphers: str | None = ...,
+        ssl_context: ssl.SSLContext | None = ...,
+        ca_cert_dir: str | None = ...,
+        key_password: str | None = ...,
+        ca_cert_data: None | str | bytes = ...,
+        tls_in_tls: typing.Literal[False] = ...,
 ) -> ssl.SSLSocket: ...
 
 
 @typing.overload
 def ssl_wrap_socket(
-    sock: socket.socket,
-    keyfile: str | None = ...,
-    certfile: str | None = ...,
-    cert_reqs: int | None = ...,
-    ca_certs: str | None = ...,
-    server_hostname: str | None = ...,
-    ssl_version: int | None = ...,
-    ciphers: str | None = ...,
-    ssl_context: ssl.SSLContext | None = ...,
-    ca_cert_dir: str | None = ...,
-    key_password: str | None = ...,
-    ca_cert_data: None | str | bytes = ...,
-    tls_in_tls: bool = ...,
+        sock: socket.socket,
+        keyfile: str | None = ...,
+        certfile: str | None = ...,
+        cert_reqs: int | None = ...,
+        ca_certs: str | None = ...,
+        server_hostname: str | None = ...,
+        ssl_version: int | None = ...,
+        ciphers: str | None = ...,
+        ssl_context: ssl.SSLContext | None = ...,
+        ca_cert_dir: str | None = ...,
+        key_password: str | None = ...,
+        ca_cert_data: None | str | bytes = ...,
+        tls_in_tls: bool = ...,
 ) -> ssl.SSLSocket | SSLTransportType: ...
 
 
 def ssl_wrap_socket(
-    sock: socket.socket,
-    keyfile: str | None = None,
-    certfile: str | None = None,
-    cert_reqs: int | None = None,
-    ca_certs: str | None = None,
-    server_hostname: str | None = None,
-    ssl_version: int | None = None,
-    ciphers: str | None = None,
-    ssl_context: ssl.SSLContext | None = None,
-    ca_cert_dir: str | None = None,
-    key_password: str | None = None,
-    ca_cert_data: None | str | bytes = None,
-    tls_in_tls: bool = False,
+        sock: socket.socket,
+        keyfile: str | None = None,
+        certfile: str | None = None,
+        cert_reqs: int | None = None,
+        ca_certs: str | None = None,
+        server_hostname: str | None = None,
+        ssl_version: int | None = None,
+        ciphers: str | None = None,
+        ssl_context: ssl.SSLContext | None = None,
+        ca_cert_dir: str | None = None,
+        key_password: str | None = None,
+        ca_cert_data: None | str | bytes = None,
+        tls_in_tls: bool = False,
 ) -> ssl.SSLSocket | SSLTransportType:
     """
     All arguments except for server_hostname, ssl_context, tls_in_tls, ca_cert_data and
@@ -486,10 +485,10 @@ def _is_key_file_encrypted(key_file: str) -> bool:
 
 
 def _ssl_wrap_socket_impl(
-    sock: socket.socket,
-    ssl_context: ssl.SSLContext,
-    tls_in_tls: bool,
-    server_hostname: str | None = None,
+        sock: socket.socket,
+        ssl_context: ssl.SSLContext,
+        tls_in_tls: bool,
+        server_hostname: str | None = None,
 ) -> ssl.SSLSocket | SSLTransportType:
     if tls_in_tls:
         if not SSLTransport:

@@ -23,7 +23,6 @@ from urllib3.util import make_headers, parse_url
 
 from . import certs
 from .__version__ import __version__
-
 # to_native_string is unused here, but imported here for backwards compatibility
 from ._internal_utils import (  # noqa: F401
     _HEADER_VALIDATORS_BYTE,
@@ -69,7 +68,6 @@ DEFAULT_ACCEPT_ENCODING = ", ".join(
     re.split(r",\s*", make_headers(accept_encoding=True)["accept-encoding"])
 )
 
-
 if sys.platform == "win32":
     # provide a proxy_bypass version on Windows without DNS lookups
 
@@ -110,6 +108,7 @@ if sys.platform == "win32":
             if re.match(test, host, re.I):
                 return True
         return False
+
 
     def proxy_bypass(host):  # noqa
         """Return True, if the host should be bypassed.
@@ -505,9 +504,9 @@ def get_encodings_from_content(content):
     xml_re = re.compile(r'^<\?xml.*?encoding=["\']*(.+?)["\'>]')
 
     return (
-        charset_re.findall(content)
-        + pragma_re.findall(content)
-        + xml_re.findall(content)
+            charset_re.findall(content)
+            + pragma_re.findall(content)
+            + xml_re.findall(content)
     )
 
 
@@ -531,7 +530,7 @@ def _parse_content_type_header(header):
             index_of_equals = param.find("=")
             if index_of_equals != -1:
                 key = param[:index_of_equals].strip(items_to_strip)
-                value = param[index_of_equals + 1 :].strip(items_to_strip)
+                value = param[index_of_equals + 1:].strip(items_to_strip)
             params_dict[key.lower()] = value
     return content_type, params_dict
 
@@ -584,7 +583,7 @@ def iter_slices(string, slice_length):
     if slice_length is None or slice_length <= 0:
         slice_length = len(string)
     while pos < len(string):
-        yield string[pos : pos + slice_length]
+        yield string[pos: pos + slice_length]
         pos += slice_length
 
 
@@ -1084,7 +1083,7 @@ def rewind_body(prepared_request):
     """
     body_seek = getattr(prepared_request.body, "seek", None)
     if body_seek is not None and isinstance(
-        prepared_request._body_position, integer_types
+            prepared_request._body_position, integer_types
     ):
         try:
             body_seek(prepared_request._body_position)

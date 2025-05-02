@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from .tz import *
-from .tz import __doc__
 
 __all__ = ["tzutc", "tzoffset", "tzlocal", "tzfile", "tzrange",
            "tzstr", "tzical", "tzwin", "tzwinlocal", "gettz",

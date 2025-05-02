@@ -15,14 +15,14 @@ Other type classes are defined that help compose the types listed above.
 
 from __future__ import unicode_literals, division, absolute_import, print_function
 
-from contextlib import contextmanager
-from encodings import idna  # noqa
 import hashlib
 import re
 import socket
 import stringprep
 import sys
 import unicodedata
+from contextlib import contextmanager
+from encodings import idna  # noqa
 
 from ._errors import unwrap
 from ._iri import iri_to_uri, uri_to_iri
@@ -69,7 +69,6 @@ from .util import int_to_bytes, int_from_bytes, inet_ntop, inet_pton
 
 
 class DNSName(IA5String):
-
     _encoding = 'idna'
     _bad_tag = (12, 19)
 
@@ -179,7 +178,6 @@ class URI(IA5String):
 
 
 class EmailAddress(IA5String):
-
     _contents = None
 
     # If the value has gone through the .set() method, thus normalizing it

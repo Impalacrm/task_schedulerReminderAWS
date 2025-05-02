@@ -7,31 +7,31 @@ etc), TZ environment string (in all known formats), given ranges (with help
 from relative deltas), local machine timezone, fixed offset timezone, and UTC
 timezone.
 """
-import datetime
-import struct
-import time
-import sys
-import os
 import bisect
+import datetime
+import os
+import struct
+import sys
+import time
 import weakref
 from collections import OrderedDict
 
 import six
 from six import string_types
 from six.moves import _thread
+
+from ._common import _validate_fromutc_inputs
 from ._common import tzname_in_python2, _tzinfo
 from ._common import tzrangebase, enfold
-from ._common import _validate_fromutc_inputs
-
 from ._factories import _TzSingleton, _TzOffsetFactory
 from ._factories import _TzStrFactory
+
 try:
     from .win import tzwin, tzwinlocal
 except ImportError:
     tzwin = tzwinlocal = None
 
 # For warning about rounding tzinfo
-from warnings import warn
 
 ZERO = datetime.timedelta(0)
 EPOCH = datetime.datetime(1970, 1, 1, 0, 0)
@@ -71,6 +71,7 @@ class tzutc(datetime.tzinfo):
             >>> tzutc() is UTC
             True
     """
+
     def utcoffset(self, dt):
         return ZERO
 
@@ -140,6 +141,7 @@ class tzoffset(datetime.tzinfo):
         The time zone offset in seconds, or (since version 2.6.0, represented
         as a :py:class:`datetime.timedelta` object).
     """
+
     def __init__(self, name, offset):
         self._name = name
 
@@ -202,6 +204,7 @@ class tzlocal(_tzinfo):
     """
     A :class:`tzinfo` subclass built around the ``time`` timezone functions.
     """
+
     def __init__(self):
         super(tzlocal, self).__init__()
 
@@ -536,7 +539,7 @@ class tzfile(_tzinfo):
 
         if timecnt:
             out.trans_list_utc = list(struct.unpack(">%dl" % timecnt,
-                                                    fileobj.read(timecnt*4)))
+                                                    fileobj.read(timecnt * 4)))
         else:
             out.trans_list_utc = []
 
@@ -637,7 +640,7 @@ class tzfile(_tzinfo):
             if not out.trans_list_utc:
                 out.ttinfo_std = out.ttinfo_first = out.ttinfo_list[0]
             else:
-                for i in range(timecnt-1, -1, -1):
+                for i in range(timecnt - 1, -1, -1):
                     tti = out.trans_idx[i]
                     if not out.ttinfo_std and not tti.isdst:
                         out.ttinfo_std = tti
@@ -801,7 +804,7 @@ class tzfile(_tzinfo):
             return False
 
         od = self._get_ttinfo(idx - 1).offset - tti.offset
-        tt = self._trans_list[idx]          # Transition time
+        tt = self._trans_list[idx]  # Transition time
 
         return timestamp < tt + od
 
@@ -946,6 +949,7 @@ class tzrange(tzrangebase):
         True
 
     """
+
     def __init__(self, stdabbr, stdoffset=None,
                  dstabbr=None, dstoffset=None,
                  start=None, end=None):
@@ -1076,6 +1080,7 @@ class tzstr(tzrange):
     .. _`GNU C Library: TZ Variable`:
         https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html
     """
+
     def __init__(self, s, posix_offset=False):
         global parser
         from dateutil.parser import _parser as parser
@@ -1261,9 +1266,9 @@ class tzical(object):
 
     .. _`RFC 5545`: https://tools.ietf.org/html/rfc5545
     """
+
     def __init__(self, fileobj):
         global rrule
-        from dateutil import rrule
 
         if isinstance(fileobj, string_types):
             self._s = fileobj
@@ -1339,7 +1344,7 @@ class tzical(object):
             if not line:
                 del lines[i]
             elif i > 0 and line[0] == " ":
-                lines[i-1] += line[1:]
+                lines[i - 1] += line[1:]
                 del lines[i]
             else:
                 i += 1
@@ -1363,7 +1368,7 @@ class tzical(object):
                         # Process component
                         pass
                     else:
-                        raise ValueError("unknown component: "+value)
+                        raise ValueError("unknown component: " + value)
                     comptype = value
                     founddtstart = False
                     tzoffsetfrom = None
@@ -1373,7 +1378,7 @@ class tzical(object):
                 elif name == "END":
                     if value == "VTIMEZONE":
                         if comptype:
-                            raise ValueError("component not closed: "+comptype)
+                            raise ValueError("component not closed: " + comptype)
                         if not tzid:
                             raise ValueError("mandatory TZID not found")
                         if not comps:
@@ -1404,7 +1409,7 @@ class tzical(object):
                         comps.append(comp)
                         comptype = None
                     else:
-                        raise ValueError("invalid component end: "+value)
+                        raise ValueError("invalid component end: " + value)
                 elif comptype:
                     if name == "DTSTART":
                         # DTSTART in VTIMEZONE takes a subset of valid RRULE
@@ -1426,27 +1431,27 @@ class tzical(object):
                     elif name == "TZOFFSETTO":
                         if parms:
                             raise ValueError(
-                                "unsupported TZOFFSETTO parm: "+parms[0])
+                                "unsupported TZOFFSETTO parm: " + parms[0])
                         tzoffsetto = self._parse_offset(value)
                     elif name == "TZNAME":
                         if parms:
                             raise ValueError(
-                                "unsupported TZNAME parm: "+parms[0])
+                                "unsupported TZNAME parm: " + parms[0])
                         tzname = value
                     elif name == "COMMENT":
                         pass
                     else:
-                        raise ValueError("unsupported property: "+name)
+                        raise ValueError("unsupported property: " + name)
                 else:
                     if name == "TZID":
                         if parms:
                             raise ValueError(
-                                "unsupported TZID parm: "+parms[0])
+                                "unsupported TZID parm: " + parms[0])
                         tzid = value
                     elif name in ("TZURL", "LAST-MODIFIED", "COMMENT"):
                         pass
                     else:
-                        raise ValueError("unsupported property: "+name)
+                        raise ValueError("unsupported property: " + name)
             elif name == "BEGIN" and value == "VTIMEZONE":
                 tzid = None
                 comps = []
@@ -1542,6 +1547,7 @@ def __get_gettz():
         .. _`"same zone" semantics`:
             https://blog.ganssle.io/articles/2018/02/aware-datetime-arithmetic.html
         """
+
         def __init__(self):
 
             self.__instances = weakref.WeakValueDictionary()
@@ -1797,7 +1803,6 @@ def resolve_imaginary(dt):
     .. versionadded:: 2.7.0
     """
     if dt.tzinfo is not None and not datetime_exists(dt):
-
         curr_offset = (dt + datetime.timedelta(hours=24)).utcoffset()
         old_offset = (dt - datetime.timedelta(hours=24)).utcoffset()
 
@@ -1827,7 +1832,6 @@ else:
         calculated_offset = 60 * ((second_offset + 30) // 60)
         return calculated_offset
 
-
 try:
     # Python 3.7 feature
     from contextlib import nullcontext as _nullcontext
@@ -1837,6 +1841,7 @@ except ImportError:
         Class for wrapping contexts so that they are passed through in a
         with statement.
         """
+
         def __init__(self, context):
             self.context = context
 

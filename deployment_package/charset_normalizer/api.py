@@ -31,16 +31,16 @@ explain_handler.setFormatter(
 
 
 def from_bytes(
-    sequences: bytes | bytearray,
-    steps: int = 5,
-    chunk_size: int = 512,
-    threshold: float = 0.2,
-    cp_isolation: list[str] | None = None,
-    cp_exclusion: list[str] | None = None,
-    preemptive_behaviour: bool = True,
-    explain: bool = False,
-    language_threshold: float = 0.1,
-    enable_fallback: bool = True,
+        sequences: bytes | bytearray,
+        steps: int = 5,
+        chunk_size: int = 512,
+        threshold: float = 0.2,
+        cp_isolation: list[str] | None = None,
+        cp_exclusion: list[str] | None = None,
+        preemptive_behaviour: bool = True,
+        explain: bool = False,
+        language_threshold: float = 0.1,
+        enable_fallback: bool = True,
 ) -> CharsetMatches:
     """
     Given a raw bytes sequence, return the best possibles charset usable to render str objects.
@@ -226,7 +226,7 @@ def from_bytes(
                     (
                         sequences[: int(50e4)]
                         if strip_sig_or_bom is False
-                        else sequences[len(sig_payload) : int(50e4)]
+                        else sequences[len(sig_payload): int(50e4)]
                     ),
                     encoding=encoding_iana,
                 )
@@ -235,7 +235,7 @@ def from_bytes(
                     (
                         sequences
                         if strip_sig_or_bom is False
-                        else sequences[len(sig_payload) :]
+                        else sequences[len(sig_payload):]
                     ),
                     encoding=encoding_iana,
                 )
@@ -273,9 +273,9 @@ def from_bytes(
         )
 
         multi_byte_bonus: bool = (
-            is_multi_byte_decoder
-            and decoded_payload is not None
-            and len(decoded_payload) < length
+                is_multi_byte_decoder
+                and decoded_payload is not None
+                and len(decoded_payload) < length
         )
 
         if multi_byte_bonus:
@@ -297,15 +297,15 @@ def from_bytes(
 
         try:
             for chunk in cut_sequence_chunks(
-                sequences,
-                encoding_iana,
-                r_,
-                chunk_size,
-                bom_or_sig_available,
-                strip_sig_or_bom,
-                sig_payload,
-                is_multi_byte_decoder,
-                decoded_payload,
+                    sequences,
+                    encoding_iana,
+                    r_,
+                    chunk_size,
+                    bom_or_sig_available,
+                    strip_sig_or_bom,
+                    sig_payload,
+                    is_multi_byte_decoder,
+                    decoded_payload,
             ):
                 md_chunks.append(chunk)
 
@@ -321,11 +321,11 @@ def from_bytes(
                     early_stop_count += 1
 
                 if (early_stop_count >= max_chunk_gave_up) or (
-                    bom_or_sig_available and strip_sig_or_bom is False
+                        bom_or_sig_available and strip_sig_or_bom is False
                 ):
                     break
         except (
-            UnicodeDecodeError
+                UnicodeDecodeError
         ) as e:  # Lazy str loading may have missed something there
             logger.log(
                 TRACE,
@@ -339,12 +339,12 @@ def from_bytes(
         # We might want to check the sequence again with the whole content
         # Only if initial MD tests passes
         if (
-            not lazy_str_hard_failure
-            and is_too_large_sequence
-            and not is_multi_byte_decoder
+                not lazy_str_hard_failure
+                and is_too_large_sequence
+                and not is_multi_byte_decoder
         ):
             try:
-                sequences[int(50e3) :].decode(encoding_iana, errors="strict")
+                sequences[int(50e3):].decode(encoding_iana, errors="strict")
             except UnicodeDecodeError as e:
                 logger.log(
                     TRACE,
@@ -368,9 +368,9 @@ def from_bytes(
             )
             # Preparing those fallbacks in case we got nothing.
             if (
-                enable_fallback
-                and encoding_iana in ["ascii", "utf_8", specified_encoding]
-                and not lazy_str_hard_failure
+                    enable_fallback
+                    and encoding_iana in ["ascii", "utf_8", specified_encoding]
+                    and not lazy_str_hard_failure
             ):
                 fallback_entry = CharsetMatch(
                     sequences,
@@ -442,8 +442,8 @@ def from_bytes(
             (
                 decoded_payload
                 if (
-                    is_too_large_sequence is False
-                    or encoding_iana in [specified_encoding, "ascii", "utf_8"]
+                        is_too_large_sequence is False
+                        or encoding_iana in [specified_encoding, "ascii", "utf_8"]
                 )
                 else None
             ),
@@ -453,8 +453,8 @@ def from_bytes(
         results.append(current_match)
 
         if (
-            encoding_iana in [specified_encoding, "ascii", "utf_8"]
-            and mean_mess_ratio < 0.1
+                encoding_iana in [specified_encoding, "ascii", "utf_8"]
+                and mean_mess_ratio < 0.1
         ):
             # If md says nothing to worry about, then... stop immediately!
             if mean_mess_ratio == 0.0:
@@ -470,10 +470,10 @@ def from_bytes(
             early_stop_results.append(current_match)
 
         if (
-            len(early_stop_results)
-            and (specified_encoding is None or specified_encoding in tested)
-            and "ascii" in tested
-            and "utf_8" in tested
+                len(early_stop_results)
+                and (specified_encoding is None or specified_encoding in tested)
+                and "ascii" in tested
+                and "utf_8" in tested
         ):
             probable_result: CharsetMatch = early_stop_results.best()  # type: ignore[assignment]
             logger.debug(
@@ -511,13 +511,13 @@ def from_bytes(
             )
             results.append(fallback_specified)
         elif (
-            (fallback_u8 and fallback_ascii is None)
-            or (
-                fallback_u8
-                and fallback_ascii
-                and fallback_u8.fingerprint != fallback_ascii.fingerprint
-            )
-            or (fallback_u8 is not None)
+                (fallback_u8 and fallback_ascii is None)
+                or (
+                        fallback_u8
+                        and fallback_ascii
+                        and fallback_u8.fingerprint != fallback_ascii.fingerprint
+                )
+                or (fallback_u8 is not None)
         ):
             logger.debug("Encoding detection: utf_8 will be used as a fallback match")
             results.append(fallback_u8)
@@ -542,16 +542,16 @@ def from_bytes(
 
 
 def from_fp(
-    fp: BinaryIO,
-    steps: int = 5,
-    chunk_size: int = 512,
-    threshold: float = 0.20,
-    cp_isolation: list[str] | None = None,
-    cp_exclusion: list[str] | None = None,
-    preemptive_behaviour: bool = True,
-    explain: bool = False,
-    language_threshold: float = 0.1,
-    enable_fallback: bool = True,
+        fp: BinaryIO,
+        steps: int = 5,
+        chunk_size: int = 512,
+        threshold: float = 0.20,
+        cp_isolation: list[str] | None = None,
+        cp_exclusion: list[str] | None = None,
+        preemptive_behaviour: bool = True,
+        explain: bool = False,
+        language_threshold: float = 0.1,
+        enable_fallback: bool = True,
 ) -> CharsetMatches:
     """
     Same thing than the function from_bytes but using a file pointer that is already ready.
@@ -572,16 +572,16 @@ def from_fp(
 
 
 def from_path(
-    path: str | bytes | PathLike,  # type: ignore[type-arg]
-    steps: int = 5,
-    chunk_size: int = 512,
-    threshold: float = 0.20,
-    cp_isolation: list[str] | None = None,
-    cp_exclusion: list[str] | None = None,
-    preemptive_behaviour: bool = True,
-    explain: bool = False,
-    language_threshold: float = 0.1,
-    enable_fallback: bool = True,
+        path: str | bytes | PathLike,  # type: ignore[type-arg]
+        steps: int = 5,
+        chunk_size: int = 512,
+        threshold: float = 0.20,
+        cp_isolation: list[str] | None = None,
+        cp_exclusion: list[str] | None = None,
+        preemptive_behaviour: bool = True,
+        explain: bool = False,
+        language_threshold: float = 0.1,
+        enable_fallback: bool = True,
 ) -> CharsetMatches:
     """
     Same thing than the function from_bytes but with one extra step. Opening and reading given file path in binary mode.
@@ -603,16 +603,16 @@ def from_path(
 
 
 def is_binary(
-    fp_or_path_or_payload: PathLike | str | BinaryIO | bytes,  # type: ignore[type-arg]
-    steps: int = 5,
-    chunk_size: int = 512,
-    threshold: float = 0.20,
-    cp_isolation: list[str] | None = None,
-    cp_exclusion: list[str] | None = None,
-    preemptive_behaviour: bool = True,
-    explain: bool = False,
-    language_threshold: float = 0.1,
-    enable_fallback: bool = False,
+        fp_or_path_or_payload: PathLike | str | BinaryIO | bytes,  # type: ignore[type-arg]
+        steps: int = 5,
+        chunk_size: int = 512,
+        threshold: float = 0.20,
+        cp_isolation: list[str] | None = None,
+        cp_exclusion: list[str] | None = None,
+        preemptive_behaviour: bool = True,
+        explain: bool = False,
+        language_threshold: float = 0.1,
+        enable_fallback: bool = False,
 ) -> bool:
     """
     Detect if the given input (file, bytes, or path) points to a binary file. aka. not a string.
@@ -633,11 +633,11 @@ def is_binary(
             enable_fallback=enable_fallback,
         )
     elif isinstance(
-        fp_or_path_or_payload,
-        (
-            bytes,
-            bytearray,
-        ),
+            fp_or_path_or_payload,
+            (
+                    bytes,
+                    bytearray,
+            ),
     ):
         guesses = from_bytes(
             fp_or_path_or_payload,

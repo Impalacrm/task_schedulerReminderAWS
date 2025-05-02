@@ -3,8 +3,8 @@ from __future__ import annotations
 import re
 import typing
 
-from ..exceptions import LocationParseError
 from .util import to_str
+from ..exceptions import LocationParseError
 
 # We only want to normalize urls with an HTTP(S) scheme.
 # urllib3 infers URLs without a scheme (None) to be http.
@@ -98,14 +98,14 @@ class Url(
     """
 
     def __new__(  # type: ignore[no-untyped-def]
-        cls,
-        scheme: str | None = None,
-        auth: str | None = None,
-        host: str | None = None,
-        port: int | None = None,
-        path: str | None = None,
-        query: str | None = None,
-        fragment: str | None = None,
+            cls,
+            scheme: str | None = None,
+            auth: str | None = None,
+            host: str | None = None,
+            port: int | None = None,
+            path: str | None = None,
+            query: str | None = None,
+            fragment: str | None = None,
     ):
         if path and not path.startswith("/"):
             path = "/" + path
@@ -212,20 +212,20 @@ class Url(
 
 @typing.overload
 def _encode_invalid_chars(
-    component: str, allowed_chars: typing.Container[str]
+        component: str, allowed_chars: typing.Container[str]
 ) -> str:  # Abstract
     ...
 
 
 @typing.overload
 def _encode_invalid_chars(
-    component: None, allowed_chars: typing.Container[str]
+        component: None, allowed_chars: typing.Container[str]
 ) -> None:  # Abstract
     ...
 
 
 def _encode_invalid_chars(
-    component: str | None, allowed_chars: typing.Container[str]
+        component: str | None, allowed_chars: typing.Container[str]
 ) -> str | None:
     """Percent-encodes a URI component without reapplying
     onto an already percent-encoded component.
@@ -248,10 +248,10 @@ def _encode_invalid_chars(
 
     for i in range(0, len(uri_bytes)):
         # Will return a single character bytestring
-        byte = uri_bytes[i : i + 1]
+        byte = uri_bytes[i: i + 1]
         byte_ord = ord(byte)
         if (is_percent_encoded and byte == b"%") or (
-            byte_ord < 128 and byte.decode() in allowed_chars
+                byte_ord < 128 and byte.decode() in allowed_chars
         ):
             encoded_component += byte
             continue

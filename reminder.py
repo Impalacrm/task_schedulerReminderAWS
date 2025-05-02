@@ -1,13 +1,14 @@
-import logging
-from db_connections import get_task_db_connection
-from helpers import get_user_basic_info_raw, get_contact_basic_info_raw, convert_utc_to_local, send_task_reminder_email
-from datetime import datetime
-import os
 import datetime
+import logging
+import os
+from datetime import datetime
+
 from dotenv import load_dotenv
 
-load_dotenv()
+from db_connections import get_task_db_connection
+from helpers import get_user_basic_info_raw, get_contact_basic_info_raw, convert_utc_to_local, send_task_reminder_email
 
+load_dotenv()
 
 
 def check_due_tasks():
@@ -60,13 +61,13 @@ def check_due_tasks():
                         logging.warning(f"Contact {contact_id} not found. Skipping task {task_id}.")
                         continue
 
-
                     task_reminder_payload = {
                         "task_title": task_title,
                         "task_description": task_description or "",
                         "user_name": f"{user_info.get('first_name', '')} {user_info.get('last_name', '')}".strip(),
                         "user_email": user_info.get("email", ""),
-                        "contact_name": " ".join(filter(None, [contact_info.get("first_name", ""),contact_info.get("last_name", "")])).title(),
+                        "contact_name": " ".join(filter(None, [contact_info.get("first_name", ""),
+                                                               contact_info.get("last_name", "")])).title(),
                         "contact_email": contact_info.get("email", "") or "",
                         "contact_phone": contact_info.get("phone", "") or ""
                     }
@@ -112,11 +113,7 @@ def check_due_tasks():
     finally:
         task_db_conn.close()
 
-
     return {
         "status": "success",
         "tasks_processed": tasks_processed
     }
-
-
-
